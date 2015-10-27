@@ -99,7 +99,7 @@ module.exports = function(config) {
                         })
                         console.info("arr : " , arr);
                         console.info("words: " , words);
-                        res.render('search.html', { words : words , objs : arr });
+                        res.render('index.html', { words : words , objs : arr });
                     }
                     else{
                         console.info("err : " , err);
