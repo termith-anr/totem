@@ -1,6 +1,6 @@
 {
-  "name": "idefix",
-  "version": "7.9.1",
+  "name": "Totem",
+  "version": "1.0",
   "author": [
     "Matthias Dieudonne"
   ],
@@ -11,7 +11,7 @@
   ],
   "description": "",
   "keywords": [],
-  "homepage": "http://github.com/termith-anr/idefix",
+  "homepage": "http://github.com/termith-anr/totem",
   "main": "index.js",
   "bin": {
     "idefix": "./idefix"
@@ -21,18 +21,13 @@
   },
   "dependencies": {
     "JSONSelect": "https://github.com/touv/JSONSelect/archive/master.tar.gz",
-    "archiver": "^0.13.0",
     "castor-core": "^2.2.0",
-    "castor-load-backup": "^1.0.0",
     "castor-load-raw": "^1.0.0",
-    "csv-string": "^2.2.2",
-    "dateformat": "^1.0.11",
     "lodash": "^3.10.1",
     "mongodb": "^2.0.42",
     "object-path": "^0.9.0",
     "promised-mongo": "^0.11.1",
     "sha1": "^1.1.0",
-    "xml-writer": "^1.6.0",
     "xmldom": "^0.1.19"
   },
   "repository": {

@@ -4,25 +4,35 @@
 
 {% block head %}
 <title>Liste des extraits pour </title>
-<link rel="stylesheet" type="text/css" href="/assets/created/css/stylesc1.css">
+<link rel="stylesheet" type="text/css" href="/assets/created/css/search.css">
 {% endblock %}
-
+        
 
 {% block content %}
 <div class="jumbotron">
-	<h1>Résulats pour le(s) mot(s) : {% for word in words %}<span class="word2Search">{{ word }}</span> {% endfor %}</h1>
+	<h4 id="resultsTitle">Résulats pour : <span class="word2Search">{{ lemma }}</span></h4>
 </div>
 
 <ul class="listResults list-group">
 	{% for title, item in objs %}
-		<li class="liResults panel panel-primary">
-			<div class="titleResult panel-heading">{{ title }}</div>
-			{% for elements in item %}
-			<div class="pResult panel-body">{{loop.index}} - {{ elements.p }}</div>
-			{% endfor %}
-		</li>
+		<div class="divResults card medium">
+      <div class="card-content">
+        <span class="card-title activator grey-text text-darken-4">{{title}}<i class="material-icons right openCard">more_vert</i></span>
+      </div>
+      <div class="card-reveal">
+        <span class="card-title grey-text text-darken-4 desactivator">{{title}}<i class="material-icons right closeCard">close</i></span>
+        {% for elements in item %}
+          <li class="liResults"><i class="tiny material-icons">label</i> {{ elements.p }}</li>
+        {% endfor %}
+      </div>
+		</div>
 	{% endfor %}
 </ul>
+
+ <ul class="pagination">
+    <li class="waves-effect" class="previousPage"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
+    <li class="waves-effect" class="nextPage"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+  </ul>
 
 {% endblock %}
 

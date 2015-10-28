@@ -1,7 +1,7 @@
 module.exports = {
     "routes": [
         {
-            "path" : "/search/:xmlid",
+            "path" : "/search/:xmlid/:page",
             "value" : "search.js",
             "method" : "get"
         }
@@ -19,7 +19,18 @@ module.exports = {
             "script" : "tei-format/scenario1.js",
             "pattern" : "**/*.xml"
         }
-    ]
+    ],
+     "documentFields" : {
+        "$text": {
+            "get" : "content.json.TEI.stdf.spanGrp.1.span",
+            "foreach": {
+                "$targetAndAna" : {
+                    "template" : "{{target}}//{{ana}}//{{corresp}}//{{lemma}}"
+                },
+                "find" : "targetAndAna"
+                  }
+        }
+    }
 };
 
 module.exports.package = pkg = require('./package.json');
