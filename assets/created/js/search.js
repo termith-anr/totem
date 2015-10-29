@@ -6,7 +6,8 @@ $(document).ready(function() {
         previousNB = (pageNB > 1) ? pageNB - 1 : 1,
         nextNB = (pageNB)  ? pageNB + 1 : 1,
         previousPage = (pageNB > 1) ? "/search/" + pageID + "/" + previousNB : null, 
-        nextPage = (pageNB) ? "/search/" + pageID + "/" + nextNB : null;
+        nextPage = (pageNB) ? "/search/" + pageID + "/" + nextNB : null,
+        liResults = $(".liResults");
 
     console.log("pageID : " , pageID , " pageNB : " , pageNB , " nextPage : " , nextPage);
 
@@ -40,11 +41,13 @@ $(document).ready(function() {
 
     if(nextPage){
       console.log(" next possible ");
-      $(".nextPage a").attr("href" , nextPage);
-      $(".nextPage").before("<li class='waves-effect'><a href=' " + nextPage + " '>" + nextNB + "</a></li>");
-      // $(".nextPage").on("click" , function(){
-      //   window.location.href = nextPage;
-      // });
+      if(liResults.length < 10){
+        $(".nextPage").addClass("disabled");
+      }
+      else{
+        $(".nextPage a").attr("href" , nextPage);
+        $(".nextPage").before("<li class='waves-effect'><a href=' " + nextPage + " '>" + nextNB + "</a></li>");
+      }
     }
     
 

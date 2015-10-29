@@ -11,6 +11,11 @@
 	-moz-column-gap: 44px;
 }
 
+.disabled{
+  pointer-events: none;
+  cursor: default;
+}
+
 .divResults{
   overflow-y: auto;
 	display: inline-block;
