@@ -1,7 +1,7 @@
 module.exports = {
     "routes": [
         {
-            "path" : "/search/:xmlid/:page?",
+            "path" : "/search/:xmlid?/:page?",
             "value" : "search.js",
             "method" : "get"
         }

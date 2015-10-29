@@ -10,12 +10,15 @@ module.exports = function(config) {
 	return function(req,res){
 
         if(config.get("teiFormat") !== "scenario1" ){
-            res.redirect('/');
+            res.render('index.html', { info : "Impossible d'utiliser TOTEM avec ces fichiers , veuillez préciser le format" });
             return
         }
 
-        if(!req.params.xmlid){
-            res.send("No xmlid sent");
+        if(!req.params.xmlid || (req.params.xmlid === undefined)){
+            res.render('index.html', { info : "Aucun ID terme envoyé , merci d'en préciser un" });
+        }
+        if(!req.params.page || (req.params.page === undefined)){
+            res.redirect("/search/" + req.params.xmlid + "/1");
         }
 
 		var xmlid      = req.params.xmlid ? ("\"#entry-" + req.params.xmlid + "\"") : null,
