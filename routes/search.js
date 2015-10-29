@@ -86,7 +86,7 @@ module.exports = function(config) {
                     db.close();
                     if(!err){
                         if(!arr.length > 0){
-                            res.render('index.html', { info : "Ce terme n'a pas été desambiguisé" });
+                            res.render('index.html', { info : "Ce terme n'a pas été desambiguisé Ou la page n'existe pas" });
                             return;
                         }
                         var words = [],
