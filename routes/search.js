@@ -52,8 +52,10 @@ module.exports = function(config) {
                     var dataText = item.text.split("//"),
                         ana      = dataText[1].toLowerCase(),
                         corresp  = dataText[2],
-                        target   = dataText[0].replace("#" , ""),
+                        target   = (dataText[0].replace("#" , "").split(" ").length > 1) ? dataText[0].replace("#" , "").split(" ")[0] : dataText[0].replace("#" , ""),
                         lemma    = dataText[3];
+
+                    console.log("target : " , target); 
 
                     var xmlDoc = new DOMParser().parseFromString(item.content.xml.toString(), 'text/xml'),
                         w = xmlDoc.getElementsByTagName('w');
