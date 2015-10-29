@@ -10,7 +10,7 @@ $(document).ready(function() {
 
     console.log("pageID : " , pageID , " pageNB : " , pageNB , " nextPage : " , nextPage);
 
-    if($("resultsTitle").length > 0){
+    if($("#resultsTitle").length > 0){
         $(".word2Search").each(function(index,element){
         $(".listResults").highlight(element.innerHTML);
       });

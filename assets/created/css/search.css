@@ -1,0 +1,53 @@
+.titleResults{
+	font-size: 14px !important;
+  display: block;
+  text-align: center;
+}
+
+.listResults{
+	-moz-columns: 3 auto;
+	width: 95vw;
+	margin-left: 2.5vw;
+	-moz-column-gap: 44px;
+}
+
+.divResults{
+  overflow-y: auto;
+	display: inline-block;
+	width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#resultsTitle,#info{
+  text-align: center;
+}
+
+.card-title{
+  margin-bottom: 25px;
+}
+
+.pResult{
+  height: auto !important;
+}
+
+.liResults{
+  margin-bottom: 25px; 
+}
+
+.card-content{
+  height: auto !important;
+  text-align: center;
+}
+
+.openCard{
+  position: absolute;
+  right: 25px;
+  top: 25px;
+}
+
+
+.pagination{
+  text-align: center;
+}

@@ -22,11 +22,9 @@ module.exports = function(config) {
         }
 
 		var xmlid      = req.params.xmlid ? ("\"#entry-" + req.params.xmlid + "\"") : null,
-            xmlidRegex1 = req.params.xmlid ? ".*#DM4.*#entry-" + req.params.xmlid : null,
+            xmlidRegex = req.params.xmlid ? ".*#DM4.*#entry-" + req.params.xmlid + "| .*#DAOn.*#entry-" + req.params.xmlid: null,
             page = parseInt(req.params.page),
             skip = (Number.isInteger(page) && page > 1) ? (page - 1)*10 +1 : 0 ;
-
-        console.info("skip : " , skip );
 
 		console.info("Recherche sur l'id : " , xmlid , " , patientez ...");
 
@@ -43,7 +41,7 @@ module.exports = function(config) {
                  { $match: { $text: { $search: xmlid } } },
                  { $project : { _id : 0 , basename : 1, text : 1 , "fields.title" : 1 , "content.xml" : 1}},
                  { $unwind : "$text" },
-                 { $match : { text : { $regex: xmlidRegex1 } } },
+                 { $match : { text : { $regex: xmlidRegex } } },
                  { $skip : skip }, // Should get the number to skip
                  { $limit: 10 } //  Sould Get a limit via ajax
                ]
