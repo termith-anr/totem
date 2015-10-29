@@ -19,7 +19,7 @@ module.exports = function(config) {
         }
 
 		var xmlid      = req.params.xmlid ? ("\"#entry-" + req.params.xmlid + "\"") : null,
-            xmlidRegex = req.params.xmlid ? ".*#entry-" + req.params.xmlid : null,
+            xmlidRegex1 = req.params.xmlid ? ".*#DM4.*#entry-" + req.params.xmlid : null,
             page = parseInt(req.params.page),
             skip = (Number.isInteger(page) && page > 1) ? (page - 1)*10 +1 : 0 ;
 
@@ -40,7 +40,7 @@ module.exports = function(config) {
                  { $match: { $text: { $search: xmlid } } },
                  { $project : { _id : 0 , basename : 1, text : 1 , "fields.title" : 1 , "content.xml" : 1}},
                  { $unwind : "$text" },
-                 { $match : { text : { $regex: xmlidRegex } } },
+                 { $match : { text : { $regex: xmlidRegex1 } } },
                  { $skip : skip }, // Should get the number to skip
                  { $limit: 10 } //  Sould Get a limit via ajax
                ]
@@ -79,14 +79,16 @@ module.exports = function(config) {
 
                     arr.push(obj);
 
-                    console.info("target : " , target);
-
-                    
+                    console.info("target : " , target);            
                     
                 }
                 else{
                     db.close();
                     if(!err){
+                        if(!arr.length > 0){
+                            res.render('index.html', { info : "Ce terme n'a pas été desambiguisé" });
+                            return;
+                        }
                         var words = [],
                             lemma = arr[0].lemma;
                         for (var i = 0; i < arr.length; i++) {

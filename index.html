@@ -10,7 +10,11 @@
 
 {% block content %}
 <div class="jumbotron">
-	<h4 id="resultsTitle">Résulats pour : <span class="word2Search">{{ lemma }}</span></h4>
+  {% if lemma %}
+    <h4 id="resultsTitle">Résulats pour : <span class="word2Search">{{ lemma }}</span></h4>
+  {% elif info %}
+    <h4 id="info">{{ info }}</h4>
+  {% endif %}
 </div>
 
 <ul class="listResults list-group">
@@ -29,10 +33,12 @@
 	{% endfor %}
 </ul>
 
- <ul class="pagination">
-    <li class="waves-effect" class="previousPage"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
-    <li class="waves-effect" class="nextPage"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+{% if lemma %}
+  <ul class="pagination">
+    <li class="waves-effect previousPage" ><a href="#"><i class="material-icons">chevron_left</i></a></li>
+    <li class="waves-effect nextPage" ><a href="#"><i class="material-icons">chevron_right</i></a></li>
   </ul>
+{% endif %}
 
 {% endblock %}
 
