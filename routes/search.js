@@ -72,22 +72,32 @@ module.exports = function(config) {
                     }
                     var word = w.text(),
                         p = w.parent(),
-                        prevW = w.prevAll("w"),
-                        nextW = w.nextAll("w"),
-                        sentence = word;
-                    if(nextW[0]){
-                        console.info("next : " , $(nextW[0]).text());
+                        prevAllW = w.prevAll(),
+                        nextAllW = w.nextAll(),
+                        nextW = "",
+                        prevW = "",
+                        sentence = word
+                    console.log("prevAll " , prevAllW.length , " nextAll " , nextAllW.length);
+
+                    for(var i = 0 ; i < 6 ; i++){
+                        console.info("i n° " , i);
+                        if(prevAllW[i]){
+                            console.info("On est dans prevall");
+                            prevW = (prevAllW[i].attr("wsAfter") === "true") ? prevAllW[i].text() + " "  :  prevAllW[i].text() ;
+                        }
+                        if(nextAllW[i]){
+                            console.info("On est dans nextvall");
+                            nextW = (nextAllW[i].attr("wsAfter") === "true") ? nextAllW[i].text() + " "  :  nextAllW[i].text() ;
+                        }
+                        sentence = prevW + sentence + nextW;
                     }
-                    // for(var i = 0 ; i < 6 ; i++){
-                    //     sentence = prevW[i].text() + sentence + nextW[i].text();
-                    // }
                     console.info("sentence : " , sentence);
                     obj = {
                         "word" : [word],
                         "lemma" : lemma,
                         "title" : item.fields.title,
                         "p" : [p],
-                        "sentence" : ["test"]
+                        "sentence" : sentence
                     }
 
                     // for(var i = 0 ; i < w.length ; i++){
@@ -104,7 +114,6 @@ module.exports = function(config) {
                     //     }
                     // }
                     arr.push(obj);
-                    console.info("target : " , target);            
                     
                 }
                 else{
