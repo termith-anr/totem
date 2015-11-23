@@ -1,6 +1,7 @@
 var mongo = require("mongodb").MongoClient,
     jsonselect = require('JSONSelect'),
     DOMParser = require('xmldom').DOMParser,
+    cheerio = require('cheerio'),
     _ = require("lodash");
 
 module.exports = function(config) {
@@ -43,7 +44,7 @@ module.exports = function(config) {
                  { $unwind : "$text" },
                  { $match : { text : { $regex: xmlidRegex } } },
                  { $skip : skip }, // Should get the number to skip
-                 { $limit: 10 } //  Sould Get a limit via ajax
+                 { $limit: 30 } //  Sould Get a limit via ajax
                ]
             )
             .each(function(err, item){
@@ -55,33 +56,54 @@ module.exports = function(config) {
                         target   = (dataText[0].replace("#" , "").split(" ").length > 1) ? dataText[0].replace("#" , "").split(" ")[0] : dataText[0].replace("#" , ""),
                         lemma    = dataText[3];
 
-                    console.log("target : " , target); 
+                    console.info("target : " , target); 
 
-                    var xmlDoc = new DOMParser().parseFromString(item.content.xml.toString(), 'text/xml'),
-                        w = xmlDoc.getElementsByTagName('w');
-                    console.info("Target -> " , target );
+                    // var xmlDoc = new DOMParser().parseFromString(item.content.xml.toString(), 'text/xml'),
+                    //     body = xmlDoc.getElementsByTagName('body').toString(),
+                    //     w = new DOMParser().parseFromString(body, 'text/xml').getElementsByTagName("w");
+                    // console.info("Target -> " , target );
 
+                    var $ = cheerio.load(item.content.xml.toString(), {xmlMode: true}),
+                        w = $('body w[xml\\:id="' + target + '"]');
+                    
+                    if(!w.length > 0 ){
+                        console.info('Pas de W dans le body sur ce doc');
+                        return;
+                    }
+                    var word = w.text(),
+                        p = w.parent(),
+                        prevW = w.prevAll("w"),
+                        nextW = w.nextAll("w"),
+                        sentence = word;
+                    if(nextW[0]){
+                        console.info("next : " , $(nextW[0]).text());
+                    }
+                    // for(var i = 0 ; i < 6 ; i++){
+                    //     sentence = prevW[i].text() + sentence + nextW[i].text();
+                    // }
+                    console.info("sentence : " , sentence);
                     obj = {
-                        "word" : [],
+                        "word" : [word],
                         "lemma" : lemma,
                         "title" : item.fields.title,
-                        "p" : []
+                        "p" : [p],
+                        "sentence" : ["test"]
                     }
 
-                    for(var i = 0 ; i < w.length ; i++){
-                        //console.info("id : " , w[i].getAttribute('xml:id'));
-                        if(w[i].getAttribute('xml:id') === target){
-                            //console.info("xmlid trouvé  : " , w[i].parentNode.textContent)
-                            var p  = w[i].parentNode.textContent;
-                            obj.p.push(p);
-                            if(obj.word.indexOf(w[i].textContent) === -1){
-                                obj.word.push(w[i].textContent);
-                            }
-                        }
-                    }
-
+                    // for(var i = 0 ; i < w.length ; i++){
+                    //     //console.info("id : " , w[i].getAttribute('xml:id'));
+                    //     if(w[i].getAttribute('xml:id') === target){
+                    //         //console.info("xmlid trouvé  : " , w[i].parentNode.textContent)
+                    //         var p  = w[i].parentNode.textContent,
+                    //             sentence = w[i-5] + w[i-4] + w[i-3] + w[i-2] + w[i-1]  + w[i] + w[i+1] + w[i+2] + w[i+3] + w[i+4] + w[i+5]
+                    //         obj.p.push(p);
+                    //         obj.sentence.push(sentence);
+                    //         if(obj.word.indexOf(w[i].textContent) === -1){
+                    //             obj.word.push(w[i].textContent);
+                    //         }
+                    //     }
+                    // }
                     arr.push(obj);
-
                     console.info("target : " , target);            
                     
                 }

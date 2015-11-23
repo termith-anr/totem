@@ -17,7 +17,23 @@
   {% endif %}
 </div>
 
-<ul class="listResults list-group">
+<div class="container">
+  <ul class="collection">
+  {% for title, item in objs %}
+  <li class="collection-item avatar">
+    <i class="circle red white-text">{{ item|length }}</i>
+    <span class="title">{{ item[0].sentence }} <br/></span>
+      <p>{{ item[0].p }}<br />
+
+      </p>
+      <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
+  </li>
+  {% endfor %}
+</ul>
+</div>
+
+
+<!-- <ul class="listResults list-group">
 	{% for title, item in objs %}
 		<div class="divResults card medium">
       <div class="card-content">
@@ -31,7 +47,7 @@
       </div>
 		</div>
 	{% endfor %}
-</ul>
+</ul> -->
 
 {% if lemma %}
   <ul class="pagination">
