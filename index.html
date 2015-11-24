@@ -18,18 +18,17 @@
 </div>
 
 <div class="container">
+  {% for title, items in objs %}
   <ul class="collection">
-  {% for title, item in objs %}
-  <li class="collection-item avatar">
-    <i class="circle red white-text">{{ item|length }}</i>
-    <span class="title">{{ item[0].sentence }} <br/></span>
-      <p>{{ item[0].p }}<br />
-
-      </p>
-      <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-  </li>
+    <li class="collection-item avatar">
+      <i class="circle grey white-text nbElements">{{ items|length }}</i>
+      <span class="title">{{ items[0].sentence }} <br/></span>
+    </li>
+    {% for item in items %}
+      <li class="collection-item subitems"><div>{{item.sentence}}</div></li>
+    {% endfor %}
+  </ul>
   {% endfor %}
-</ul>
 </div>
 
 
@@ -49,12 +48,12 @@
 	{% endfor %}
 </ul> -->
 
-{% if lemma %}
+<!-- {% if lemma %}
   <ul class="pagination">
     <li class="waves-effect previousPage" ><a href="#"><i class="material-icons">chevron_left</i></a></li>
     <li class="waves-effect nextPage" ><a href="#"><i class="material-icons">chevron_right</i></a></li>
   </ul>
-{% endif %}
+{% endif %} -->
 
 {% endblock %}
 

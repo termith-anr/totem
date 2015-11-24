@@ -7,9 +7,25 @@ $(document).ready(function() {
         nextNB = (pageNB)  ? pageNB + 1 : 1,
         previousPage = (pageNB > 1) ? "/search/" + pageID + "/" + previousNB : null, 
         nextPage = (pageNB) ? "/search/" + pageID + "/" + nextNB : null,
-        liResults = $(".liResults");
+        liResults = $(".liResults"),
+        collection;
 
     console.log("pageID : " , pageID , " pageNB : " , pageNB , " nextPage : " , nextPage);
+
+    $(".nbElements").on("click" , function(){
+      collection = $(this).parents(".collection");
+      if(!collection.hasClass("open")){
+        collection.addClass("open");
+        collection.children(".subitems").show();
+        collection.siblings().css({ opacity : 0 });
+      }
+      else{
+        collection.removeClass("open");
+        collection.children(".subitems").hide();
+        collection.siblings().css({ opacity : 1 });
+      }
+
+    });
 
     if($("#resultsTitle").length > 0){
         $(".word2Search").each(function(index,element){

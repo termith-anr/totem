@@ -58,11 +58,6 @@ module.exports = function(config) {
 
                     console.info("target : " , target); 
 
-                    // var xmlDoc = new DOMParser().parseFromString(item.content.xml.toString(), 'text/xml'),
-                    //     body = xmlDoc.getElementsByTagName('body').toString(),
-                    //     w = new DOMParser().parseFromString(body, 'text/xml').getElementsByTagName("w");
-                    // console.info("Target -> " , target );
-
                     var $ = cheerio.load(item.content.xml.toString(), {xmlMode: true}),
                         w = $('body w[xml\\:id="' + target + '"]');
                     
@@ -70,28 +65,32 @@ module.exports = function(config) {
                         console.info('Pas de W dans le body sur ce doc');
                         return;
                     }
-                    var word = w.text(),
+
+                    var word = w.attr("nb" , 0),
                         p = w.parent(),
                         prevAllW = w.prevAll(),
                         nextAllW = w.nextAll(),
                         nextW = "",
                         prevW = "",
-                        sentence = word
-                    console.log("prevAll " , prevAllW.length , " nextAll " , nextAllW.length);
+                        sentence = word,
+                        classW;
 
-                    for(var i = 0 ; i < 6 ; i++){
-                        console.info("i n° " , i);
-                        if(prevAllW[i]){
-                            console.info("On est dans prevall");
-                            prevW = (prevAllW[i].attr("wsAfter") === "true") ? prevAllW[i].text() + " "  :  prevAllW[i].text() ;
-                        }
-                        if(nextAllW[i]){
-                            console.info("On est dans nextvall");
-                            nextW = (nextAllW[i].attr("wsAfter") === "true") ? nextAllW[i].text() + " "  :  nextAllW[i].text() ;
-                        }
+                    //console.info("prevAll " , prevAllW.length , " nextAll " , nextAllW.length);
+
+                    for(i = 1 ; i < 6 ; i++){
+                        //console.info("i n° " , i , " prevvI : " , prevAllW[i]);
+                        // if(prevAllW[i]){
+                        //     console.info("On est dans prevall");
+                        //     prevW = ($(prevAllW[i]).attr("wsAfter") === "true") ? $(prevAllW[i]).text() + " "  :  $(prevAllW[i]).text() ;
+                        // }
+                        // if(nextAllW[i]){
+                        //     console.info("On est dans nextvall");
+                        //     nextW = ($(nextAllW[i]).attr("wsAfter") === "true") ? $(nextAllW[i]).text() + " "  :  $(nextAllW[i]).text() ;
+                        // }
+                        prevW  = (prevAllW[i]) ? $(prevAllW[i]).attr("nb" , i) : "";
+                        nextW  = (nextAllW[i]) ? $(nextAllW[i]).attr("nb" , i) : "";
                         sentence = prevW + sentence + nextW;
                     }
-                    console.info("sentence : " , sentence);
                     obj = {
                         "word" : [word],
                         "lemma" : lemma,
@@ -99,20 +98,7 @@ module.exports = function(config) {
                         "p" : [p],
                         "sentence" : sentence
                     }
-
-                    // for(var i = 0 ; i < w.length ; i++){
-                    //     //console.info("id : " , w[i].getAttribute('xml:id'));
-                    //     if(w[i].getAttribute('xml:id') === target){
-                    //         //console.info("xmlid trouvé  : " , w[i].parentNode.textContent)
-                    //         var p  = w[i].parentNode.textContent,
-                    //             sentence = w[i-5] + w[i-4] + w[i-3] + w[i-2] + w[i-1]  + w[i] + w[i+1] + w[i+2] + w[i+3] + w[i+4] + w[i+5]
-                    //         obj.p.push(p);
-                    //         obj.sentence.push(sentence);
-                    //         if(obj.word.indexOf(w[i].textContent) === -1){
-                    //             obj.word.push(w[i].textContent);
-                    //         }
-                    //     }
-                    // }
+                    
                     arr.push(obj);
                     
                 }

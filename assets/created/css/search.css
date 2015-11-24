@@ -56,3 +56,50 @@
 .pagination{
   text-align: center;
 }
+
+
+/* STYLE SENTENCE ELEMENTS */
+
+[wsAfter="true"]{
+  margin-right: 6px;
+}
+
+[nb="0"]{
+  color : red;
+}
+
+[nb="1"]{
+  color : blue;
+}
+
+[nb="2"]{
+  color : #607D8B;
+}
+
+[nb="3"]{
+  color : #607D8B;
+}
+
+[nb="4"]{
+  color : #607D8B;
+}
+
+[nb="5"]{
+  color : #607D8B;
+}
+
+.collection{
+  transition: all 1s;
+}
+
+.subitems{
+  display: none;
+}
+
+.nbElements{
+  cursor: pointer;
+}
+
+.nbElements:hover{
+  background: red !important;
+}
