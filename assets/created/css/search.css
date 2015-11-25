@@ -103,3 +103,8 @@
 .nbElements:hover{
   background: red !important;
 }
+
+.sentence:hover{
+  cursor: pointer;
+  text-decoration: underline;
+}

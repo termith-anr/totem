@@ -65,6 +65,22 @@ $(document).ready(function() {
         $(".nextPage").before("<li class='waves-effect'><a href=' " + nextPage + " '>" + nextNB + "</a></li>");
       }
     }
+
+
+    // Ajax Load paragraph
+    var target,
+        wid;
+    $(".sentence").on("click" , function(){
+      target = $(this).attr("data-target").toString();
+      wid = $(this).attr("data-wid").toString();
+      console.log("wid : " , wid , " target : ", target);
+      $.ajax({
+        url: "/getpar/" +  wid + "/" + target
+      })
+      .done(function(data){
+        console.log("p : " , data);
+      });
+    });
     
 
 });

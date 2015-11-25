@@ -4,6 +4,11 @@ module.exports = {
             "path" : "/search/:xmlid?/:page?",
             "value" : "search.js",
             "method" : "get"
+        },
+        {
+            "path" : "/getpar/:wid/:target",
+            "value" : "getpar.js",
+            "method" : "get"
         }
     ],
     "loaders" : [
