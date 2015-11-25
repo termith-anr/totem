@@ -48,7 +48,7 @@ module.exports = function(config) {
                         return;
                     }
 
-                    p = w.parent();                    
+                    p = w.parent().text();                    
                 }
                 else{
                     db.close();

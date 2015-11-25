@@ -69,16 +69,37 @@ $(document).ready(function() {
 
     // Ajax Load paragraph
     var target,
-        wid;
+        wid,
+        parent,
+        html;
     $(".sentence").on("click" , function(){
+      parent = $(this).parents(".collection-item").first();
+
       target = $(this).attr("data-target").toString();
       wid = $(this).attr("data-wid").toString();
-      console.log("wid : " , wid , " target : ", target);
+      // Si le p est deja present
+      if($("#" + target).length > 0){
+        $("#" + target).openModal();
+        return;
+      }
       $.ajax({
         url: "/getpar/" +  wid + "/" + target
       })
       .done(function(data){
-        console.log("p : " , data);
+        if(data.p){
+          console.log("Il y a un P a ajouter");
+          html = '<div id="' + target + '" class="modal bottom-sheet">\
+            <div class="modal-content">\
+              <h4>Paragraphe</h4>\
+              <p>' + data.p + '</p>\
+            </div>\
+            <div class="modal-footer">\
+              <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>\
+            </div>\
+          </div>';
+          $(parent).append(html);
+          $("#" + target).openModal();
+        }
       });
     });
     
