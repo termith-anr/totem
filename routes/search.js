@@ -40,7 +40,7 @@ module.exports = function(config) {
             .aggregate(
                [
                  { $match: { $text: { $search: xmlid } } },
-                 { $project : { _id : 0 , basename : 1, text : 1 , "fields.title" : 1 , "content.xml" : 1}},
+                 { $project : { _id : 0 , basename : 1, text : 1 , "fields.title" : 1 , "content.xml" : 1 , wid : 1}},
                  { $unwind : "$text" },
                  { $match : { text : { $regex: xmlidRegex } } },
                  { $skip : skip }, // Should get the number to skip
@@ -92,6 +92,8 @@ module.exports = function(config) {
                         sentence = prevW + sentence + nextW;
                     }
                     obj = {
+                        "wid" : item.wid,
+                        "target" : target,
                         "word" : [word],
                         "lemma" : lemma,
                         "title" : item.fields.title,
