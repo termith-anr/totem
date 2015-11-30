@@ -61,7 +61,11 @@
 /* STYLE SENTENCE ELEMENTS */
 
 [wsAfter="true"]{
-  margin-right: 6px;
+  margin-right: 4px;
+}
+
+[nb]{
+  color : #607D8B;
 }
 
 [nb="0"]{
@@ -70,22 +74,6 @@
 
 [nb="1"]{
   color : blue;
-}
-
-[nb="2"]{
-  color : #607D8B;
-}
-
-[nb="3"]{
-  color : #607D8B;
-}
-
-[nb="4"]{
-  color : #607D8B;
-}
-
-[nb="5"]{
-  color : #607D8B;
 }
 
 .collection{
@@ -107,4 +95,32 @@
 .sentence:hover{
   cursor: pointer;
   text-decoration: underline;
+}
+
+
+p .wordToSearch{
+  color: red;
+} 
+
+
+
+/* REWRITTE materialisecss */
+
+.collection{
+  margin: 10px;
+}
+
+.collection .collection-item.avatar{
+  min-height: 57px;
+}
+
+.collection .collection-item.avatar i.circle{
+  font-size: 13px;
+  line-height: 20px;
+}
+.collection .collection-item.avatar .circle {
+  height: 20px;
+  width: 20px;
+  left: 47px;
+  top: 4px;
 }

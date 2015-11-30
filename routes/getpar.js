@@ -43,12 +43,14 @@ module.exports = function(config) {
 
                     console.info("w " , w);
 
+                    w.addClass("wordToSearch");
+
                     if(!(w.length > 0)){
                         console.info('Pas de W dans le body sur ce doc');
                         return;
                     }
 
-                    p = w.parent().text();                    
+                    p = w.parent().toString();                    
                 }
                 else{
                     db.close();

@@ -77,7 +77,7 @@ module.exports = function(config) {
 
                     //console.info("prevAll " , prevAllW.length , " nextAll " , nextAllW.length);
 
-                    for(i = 1 ; i < 6 ; i++){
+                    for(i = 0 ; i < 6 ; i++){
                         //console.info("i n° " , i , " prevvI : " , prevAllW[i]);
                         // if(prevAllW[i]){
                         //     console.info("On est dans prevall");
@@ -87,8 +87,8 @@ module.exports = function(config) {
                         //     console.info("On est dans nextvall");
                         //     nextW = ($(nextAllW[i]).attr("wsAfter") === "true") ? $(nextAllW[i]).text() + " "  :  $(nextAllW[i]).text() ;
                         // }
-                        prevW  = (prevAllW[i]) ? $(prevAllW[i]).attr("nb" , i) : "";
-                        nextW  = (nextAllW[i]) ? $(nextAllW[i]).attr("nb" , i) : "";
+                        prevW  = (prevAllW[i]) ? $(prevAllW[i]).attr("nb" , i+1) : "";
+                        nextW  = (nextAllW[i]) ? $(nextAllW[i]).attr("nb" , i+1) : "";
                         sentence = prevW + sentence + nextW;
                     }
                     obj = {
