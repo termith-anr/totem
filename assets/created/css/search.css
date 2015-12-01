@@ -1,3 +1,9 @@
+/*GENERAL*/
+
+#containerUL{
+  min-height: calc(100vh + 75px);
+}
+
 .titleResults{
 	font-size: 14px !important;
   display: block;

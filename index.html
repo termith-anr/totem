@@ -2,6 +2,7 @@
 
 
 
+
 {% block head %}
 <title>Liste des extraits pour </title>
 <link rel="stylesheet" type="text/css" href="/assets/created/css/search.css">
@@ -9,6 +10,20 @@
         
 
 {% block content %}
+
+{% if not objs %}
+<div class="container">
+  <div class="row">
+    <div class="input-field col s12">
+      <input id="id" type="text" class="validate" placeholder="220576">
+      <label for="icon_prefix">ID candidat</label>
+      <a class="waves-effect waves-light btn send">Envoyer</a>
+    </div>
+  </div>
+</div>
+
+
+{% else %}
 <div class="jumbotron">
   {% if lemma %}
     <h4 id="resultsTitle">Résultats pour : <span class="word2Search">{{ lemma }}</span></h4>
@@ -17,11 +32,11 @@
   {% endif %}
 </div>
 
-<div class="container">
+<div class="container" id="containerUL">
   {% for title, items in objs %}
   <ul class="collection">
     <li class="collection-item avatar">
-      <i class="circle grey white-text nbElements">{{ items|length }}</i>
+      {% if items|length > 1 %}<i class="circle grey white-text nbElements">{{ items|length }}</i>{% endif %}
       <span class="title sentence" data-target="{{ items[0].target }}" data-wid="{{ items[0].wid }}">{{ items[0].sentence }} <br/></span>
     </li>
     {% if items|length > 1 %}
@@ -29,38 +44,15 @@
         <li class="collection-item subitems"><div class="sentence" data-target="{{ items[i].target }}" data-wid="{{ items[i].wid }}">{{items[i].sentence}}</div></li>
       {% endfor %}
     {% endif %}
-    
   </ul>
   {% endfor %}
+  <a href="/search/{{id}}/{{page + 1}}" class="nextPage">next page</a>
 </div>
-
-
-<!-- <ul class="listResults list-group">
-	{% for title, item in objs %}
-		<div class="divResults card medium">
-      <div class="card-content">
-        <span class="card-title activator grey-text text-darken-4">{{title}}<i class="material-icons right openCard">more_vert</i></span>
-      </div>
-      <div class="card-reveal">
-        <span class="card-title grey-text text-darken-4 desactivator">{{title}}<i class="material-icons right closeCard">close</i></span>
-        {% for elements in item %}
-          <li class="liResults"><i class="tiny material-icons">label</i> {{ elements.p }}</li>
-        {% endfor %}
-      </div>
-		</div>
-	{% endfor %}
-</ul> -->
-
-<!-- {% if lemma %}
-  <ul class="pagination">
-    <li class="waves-effect previousPage" ><a href="#"><i class="material-icons">chevron_left</i></a></li>
-    <li class="waves-effect nextPage" ><a href="#"><i class="material-icons">chevron_right</i></a></li>
-  </ul>
-{% endif %} -->
+{% endif %}
 
 {% endblock %}
 
 {% block scripts %}
-<script src="/assets/vendor/js/jquery.highlight.js"></script>
+<script src="/assets/vendor/js/jquery.jscroll.min.js"></script>
 <script src="/assets/created/js/search.js"></script>
 {% endblock %}

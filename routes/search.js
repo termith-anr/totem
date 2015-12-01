@@ -16,18 +16,23 @@ module.exports = function(config) {
         }
 
         if(!req.params.xmlid || (req.params.xmlid === undefined)){
-            res.render('index.html', { info : "Aucun ID terme envoyé , merci d'en préciser un" });
+            res.render('index.html');
+            return;
         }
         if(!req.params.page || (req.params.page === undefined)){
+            console.info("redirection ...");
             res.redirect("/search/" + req.params.xmlid + "/1");
+            return;
         }
 
 		var xmlid      = req.params.xmlid ? ("\"#entry-" + req.params.xmlid + "\"") : null,
             xmlidRegex = req.params.xmlid ? ".*#DM4.*#entry-" + req.params.xmlid + "| .*#DAOn.*#entry-" + req.params.xmlid: null,
-            page = parseInt(req.params.page),
-            skip = (Number.isInteger(page) && page > 1) ? (page - 1)*10 +1 : 0 ;
+            page = req.params.page ?  parseInt(req.params.page)  : 1,
+            skip = (Number.isInteger(page) && page > 1) ? (page - 1)*50 +1 : 0 ;
 
-		console.info("Recherche sur l'id : " , xmlid , " , patientez ...");
+        console.info("Recherche sur l'id : " , xmlid , " , patientez ..." , "page nb : " , req.params.page);
+        console.info("skip : " , skip);
+
 
         var arr = [], // final array containing all objs
             obj = {}, // temps obj use in loop
@@ -44,7 +49,7 @@ module.exports = function(config) {
                  { $unwind : "$text" },
                  { $match : { text : { $regex: xmlidRegex } } },
                  { $skip : skip }, // Should get the number to skip
-                 { $limit: 30 } //  Sould Get a limit via ajax
+                 { $limit: 50 } //  Sould Get a limit via ajax
                ]
             )
             .each(function(err, item){
@@ -132,7 +137,7 @@ module.exports = function(config) {
                         })
                         console.info("arr : " , arr);
                         console.info("words: " , words);
-                        res.render('index.html', { words : words , lemma : lemma , objs : arr });
+                        res.render('index.html', { page : page , id : req.params.xmlid,  words : words , lemma : lemma , objs : arr });
                     }
                     else{
                         console.info("err : " , err);

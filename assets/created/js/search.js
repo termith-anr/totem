@@ -1,16 +1,33 @@
 $(document).ready(function() {
-
+  if($(".send").length > 0){
+    $(".send").on("click" , function(){
+      idToSearch = $(this).siblings(".validate").val();
+      window.location.replace("/search/" + idToSearch);
+    });
+  }
+  else{
     var pageUrl = window.location.pathname,
-        pageID = pageUrl.split("/")[2],
-        pageNB = parseInt(pageUrl.split("/")[3]),
-        previousNB = (pageNB > 1) ? pageNB - 1 : 1,
-        nextNB = (pageNB)  ? pageNB + 1 : 1,
-        previousPage = (pageNB > 1) ? "/search/" + pageID + "/" + previousNB : null, 
-        nextPage = (pageNB) ? "/search/" + pageID + "/" + nextNB : null,
-        liResults = $(".liResults"),
-        collection;
+      pageID = pageUrl.split("/")[2],
+      pageNB = parseInt(pageUrl.split("/")[3]),
+      previousNB = (pageNB > 1) ? pageNB - 1 : 1,
+      nextNB = (pageNB)  ? pageNB + 1 : 1,
+      previousPage = (pageNB > 1) ? "/search/" + pageID + "/" + previousNB : null, 
+      nextPage = (pageNB) ? "/search/" + pageID + "/" + nextNB : null,
+      liResults = $(".liResults"),
+      collection,
+      idToSearch;
 
     console.log("pageID : " , pageID , " pageNB : " , pageNB , " nextPage : " , nextPage);
+
+    // $("#containerUL").append('<a href="'+ nextPage +'" class="nextPage">next page</a>')
+
+    $('#containerUL').jscroll({
+      debug : true,
+      loadingHtml: '<div class="preloader-wrapper small active"><div class="spinner-layer spinner-red-only"><div class="circle-clipper left"><div class="circle"></div></div><div class="gap-patch"><div class="circle"></div></div><div class="circle-clipper right"><div class="circle"></div></div></div></div>',
+      padding: 50,
+      contentSelector : "#containerUL",
+      nextSelector : ".nextPage"
+    });
 
     $(".nbElements").on("click" , function(){
       collection = $(this).parents(".collection");
@@ -26,13 +43,7 @@ $(document).ready(function() {
       }
 
     });
-
-    if($("#resultsTitle").length > 0){
-        $(".word2Search").each(function(index,element){
-        $(".listResults").highlight(element.innerHTML);
-      });
-    }
-		
+    
     $(".openCard , .activator").on("click"  , function(){
       $(this).parents(".divResults").css("display" , "block");
     });
@@ -102,6 +113,5 @@ $(document).ready(function() {
         }
       });
     });
-    
-
+  }
 });
