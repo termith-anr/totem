@@ -32,9 +32,9 @@
   {% endif %}
 </div>
 
-<div class="container" id="containerUL">
+<div class="container containerUL">
   {% for title, items in objs %}
-  <ul class="collection">
+  <ul class="collection toGet">
     <li class="collection-item avatar">
       {% if items|length > 1 %}<i class="circle grey white-text nbElements">{{ items|length }}</i>{% endif %}
       <span class="title sentence" data-target="{{ items[0].target }}" data-wid="{{ items[0].wid }}">{{ items[0].sentence }} <br/></span>
@@ -46,7 +46,7 @@
     {% endif %}
   </ul>
   {% endfor %}
-  <a href="/search/{{id}}/{{page + 1}}" class="nextPage">next page</a>
+  <a href="/search/{{id}}/{{page + 1}}" class="nextPage toGet">next page</a>
 </div>
 {% endif %}
 

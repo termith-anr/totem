@@ -21,15 +21,15 @@ $(document).ready(function() {
 
     // $("#containerUL").append('<a href="'+ nextPage +'" class="nextPage">next page</a>')
 
-    $('#containerUL').jscroll({
+    $('.containerUL').jscroll({
       debug : true,
       loadingHtml: '<div class="preloader-wrapper small active"><div class="spinner-layer spinner-red-only"><div class="circle-clipper left"><div class="circle"></div></div><div class="gap-patch"><div class="circle"></div></div><div class="circle-clipper right"><div class="circle"></div></div></div></div>',
-      padding: 50,
-      contentSelector : "#containerUL",
-      nextSelector : ".nextPage"
+      padding: 250,
+      contentSelector : ".containerUL .toGet",
+      nextSelector : ".nextPage:last"
     });
 
-    $(".nbElements").on("click" , function(){
+    $(document).on("click" , ".nbElements" , function(){
       collection = $(this).parents(".collection");
       if(!collection.hasClass("open")){
         collection.addClass("open");
@@ -83,7 +83,8 @@ $(document).ready(function() {
         wid,
         parent,
         html;
-    $(".sentence").on("click" , function(){
+    $(document).on("click" , ".sentence" , function(){
+      console.log("clickkk");
       parent = $(this).parents(".collection-item").first();
 
       target = $(this).attr("data-target").toString();

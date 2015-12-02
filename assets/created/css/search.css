@@ -130,3 +130,8 @@ p .wordToSearch{
   left: 47px;
   top: 4px;
 }
+
+
+.jscroll-loading{
+  text-align: center !important;
+}
