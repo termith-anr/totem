@@ -1,5 +1,4 @@
 var mongo = require("mongodb").MongoClient,
-    jsonselect = require('JSONSelect'),
     DOMParser = require('xmldom').DOMParser,
     cheerio = require('cheerio'),
     _ = require("lodash");

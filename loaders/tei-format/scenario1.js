@@ -6,7 +6,7 @@
 // Required modules
 var objectPath = require('object-path'),
     sha1 = require('sha1'),
-    jsonselect = require('JSONSelect'),
+    cheerio = require('cheerio'),
     _ = require('lodash');
 
 
