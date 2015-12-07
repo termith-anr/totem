@@ -15,6 +15,10 @@ module.exports = {
         {
             "script" : "castor-load-raw",
             "pattern" : "**/*.xml"
+        },
+        {
+            "script" : "tei-format/scenario1.js",
+            "pattern" : "**/*.xml"
         }
     ]
 };
