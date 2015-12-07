@@ -15,7 +15,6 @@ module.exports = function(options,config) {
     options = options || {};
     config = config.get() || {};
     return function (input, submit) {
-
         // Execute this loader only for this format given in json config file
         if(config.teiFormat === "scenario1") {
 
@@ -66,12 +65,10 @@ module.exports = function(options,config) {
 
             // ADD title to input
             objectPath.ensureExists(input, "fields.title", title);
-
         }
         /************************
          **** NEXT LOADER ****
          ************************/
         submit(null, input);
-
     }
 };
