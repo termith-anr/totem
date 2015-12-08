@@ -36,48 +36,55 @@ module.exports = function(options,config) {
       console.info(" Nom : "  , input.basename);
 
       var list  = [],
+          obj = {},
           words = $('spanGrp[type="candidatsTermes"] span').filter('[target],[corresp],[ana~="#DM4"],[ana~="#DAOn"]'),
           firstWord,
           endWord,
-          par,
+          para,
           sentence,
           target,
+          corresp,
+          lemma,
           prevAllW,
           nextAllW,
           prevW,
           nextW;
 
-
-      console.info("NB de mots : " , words.length);
+       console.info("Il y a  : " , words.length , " span");
 
       // For each span
       for (var i = 0; i < words.length; i++) {
         target = $(words[i]).attr("target").replace(/#/g , "").split(" ");
         firstWord = $('body w[xml\\:id="' + target[0] + '"]');
-        endWord = (target.length > 1)
+        // If word in body
+        if($(firstWord).length < 1){
+          continue;
+        }
+
+        endWord = (target.length > 1) ? $('body w[xml\\:id="' + target[target.length - 1] + '"]') : firstWord;
+        corresp = $(words[i]).attr("corresp").replace(/#/g , "").toString();
+        para = $(words[i]).parent().toString();
 
         // If word in body
-        if($(firstWord).length > 0){
-          prevAllW = $(firstWord).prevAll();
-          // If target uniq
-          if(target.length === 1){
-            nextAllW = $(firstWord).nextAll();
-            sentence = firstWord;
-            //Get only 6 next & prev words
-            for(i = 0 ; i < 6 ; i++){
-              prevW  = (prevAllW[i]) ? $(prevAllW[i]).attr("nb" , i+1) : "";
-              nextW  = (nextAllW[i]) ? $(nextAllW[i]).attr("nb" , i+1) : "";
-              sentence = prevW + sentence + nextW;
-            }
-            console.info("Sentence : " , sentence);
-            return;
-          }
-          // If target is composed
-          else if(target.length > 1){
-            nextAllW = $(firstWord).nextAll();
-          }
+        prevAllW = $(firstWord).prevAll();
+        nextAllW = $(firstWord).nextAll();
+        sentence = firstWord;
+        //Get only 6 next & prev words
+        for(var j = 0 ; j < 6 ; j++){
+          prevW  = (prevAllW[j]) ? $(prevAllW[j]).attr("nb" , j+1) : "";
+          nextW  = (nextAllW[j]) ? $(nextAllW[j]).attr("nb" , j+1) : "";
+          sentence = prevW + sentence + nextW;
         }
-      };
+        sentence = sentence.toString();
+
+        obj.title = input.basename;
+        obj.corresp = corresp;
+        obj.target = target;
+        obj.sentence = sentence;
+        obj.para = para;
+        submit(null, obj);
+        console.info("obj : " , obj.title , i , "/" , words.length);
+      }
 
       // // Loadash , trie par xml#id + retourne le mot avec espace si besoin  + jointure
       // title = _.chain(list)
@@ -95,9 +102,5 @@ module.exports = function(options,config) {
       // ADD title to input
       // objectPath.ensureExists(input, "fields.title", title);
     }
-    /************************
-     **** NEXT LOADER ****
-     ************************/
-     submit(null, input);
   }
 };
