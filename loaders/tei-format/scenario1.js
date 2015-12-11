@@ -10,6 +10,7 @@ var objectPath = require('object-path'),
     cheerio = require('cheerio'),
     clone = require('clone'),
     kuler = require('kuler'),
+    async = require('async'),
     _ = require('lodash');
 
 module.exports = function(options,config) {
@@ -21,9 +22,6 @@ module.exports = function(options,config) {
       config = config.get() || {};
 
   return function (input, submit) {
-
-    
-
     //Load Cheerio on xml DOC input
     $ = cheerio.load(input.content.xml.toString(), {
       normalizeWhitespace: true,
@@ -44,6 +42,21 @@ module.exports = function(options,config) {
         nextW;
 
     // For each span in file
+    async.each(words , function(word,next){
+
+      //Call next element
+      next();
+    }, 
+    function(err){
+      // Last callback send all submited elements
+      if(!err){
+        console.info(kuler("Subdocuments sent !" , "green"));
+        submit();
+        return;
+      }
+      console.info(kuler(err , "red"));
+    })
+
     for (var i = 0; i < words.length; i++) {
       target = $(words[i]).attr("target").replace(/#/g , "").split(" ");
       firstWord = $('body w[xml\\:id="' + target[0] + '"]');
@@ -83,7 +96,7 @@ module.exports = function(options,config) {
 
       // Check if submited not > processor Nb
       var qeSubmit = submit(obj , function(){
-        delayed()
+        delayed();
       });
 
       var delayed = function() {
@@ -96,6 +109,5 @@ module.exports = function(options,config) {
       console.info(kuler(i , "orange") + '  / ' +  words.length + ' sent \r');
     }
     submit();
-    console.info(kuler("Subdocuments sent !" , "green"));
   }
 };
