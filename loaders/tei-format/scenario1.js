@@ -60,7 +60,7 @@ module.exports = function(options,config) {
       var obj = clone(input,false);
 
       endWord = (target.length > 1) ? $('body w[xml\\:id="' + target[target.length - 1] + '"]') : firstWord;
-      corresp = $(words).attr("corresp").replace(/#/g , "").toString();
+      corresp = $(word).attr("corresp").replace(/#/g , "").toString();
       para = $('body w[xml\\:id="' + target[0] + '"]').parent().toString();
       prevAllW = $(firstWord).prevAll();
       nextAllW = $(firstWord).nextAll();
