@@ -1,6 +1,4 @@
 var mongo = require("mongodb").MongoClient,
-    DOMParser = require('xmldom').DOMParser,
-    cheerio = require('cheerio'),
     _ = require("lodash");
 
 module.exports = function(config) {
@@ -41,16 +39,17 @@ module.exports = function(config) {
         mongo.connect(config.get('connectionURI'), function(err, db) {
             //console.log("Connected correctly to server");
             db.collection(config.get('collectionName'))
-            .aggregate(
-               [
-                 { $match: { $text: { $search: xmlid } } },
-                 { $project : { _id : 0 , basename : 1, text : 1 , "fields.title" : 1 , "content.xml" : 1 , wid : 1}},
-                 { $unwind : "$text" },
-                 { $match : { text : { $regex: xmlidRegex } } },
-                 { $skip : skip }, // Should get the number to skip
-                 { $limit: 50 } //  Sould Get a limit via ajax
-               ]
-            )
+            // .aggregate(
+            //    [
+            //      { $match: { $text: { $search: xmlid } } },
+            //      { $project : { _id : 0 , basename : 1, text : 1 , "fields.title" : 1 , "content.xml" : 1 , wid : 1}},
+            //      { $unwind : "$text" },
+            //      { $match : { text : { $regex: xmlidRegex } } },
+            //      { $skip : skip }, // Should get the number to skip
+            //      { $limit: 50 } //  Sould Get a limit via ajax
+            //    ]
+            // )
+            .find({"content.corresp" : req.params.xmlid } , {content : 1 , basename : 1})
             .each(function(err, item){
                 if(!err && item){
                     console.info("Fichier -> ", item.basename );
