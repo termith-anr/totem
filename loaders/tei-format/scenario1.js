@@ -28,6 +28,9 @@ module.exports = function(options,config) {
       xmlMode: true
     });
 
+    // Remove BIG & USELESS XML content
+    delete input.content.xml;
+
     var words = $('spanGrp[type="candidatsTermes"] span').filter('[target],[corresp],[ana~="#DM4"],[ana~="#DAOn"]'),
         firstWord,
         endWord,
@@ -44,33 +47,20 @@ module.exports = function(options,config) {
     // For each span in file
     async.each(words , function(word,next){
 
-      //Call next element
-      next();
-    }, 
-    function(err){
-      // Last callback send all submited elements
-      if(!err){
-        console.info(kuler("Subdocuments sent !" , "green"));
-        submit();
-        return;
-      }
-      console.info(kuler(err , "red"));
-    })
-
-    for (var i = 0; i < words.length; i++) {
-      target = $(words[i]).attr("target").replace(/#/g , "").split(" ");
+      target = $(word).attr("target").replace(/#/g , "").split(" ");
       firstWord = $('body w[xml\\:id="' + target[0] + '"]');
 
       // If word not in body balise continue with other span
       if($(firstWord).length < 1){
-        continue;
+        next();
+        return;
       }
 
       // Build clone of input file
-    var obj = clone(input,false);
+      var obj = clone(input,false);
 
       endWord = (target.length > 1) ? $('body w[xml\\:id="' + target[target.length - 1] + '"]') : firstWord;
-      corresp = $(words[i]).attr("corresp").replace(/#/g , "").toString();
+      corresp = $(words).attr("corresp").replace(/#/g , "").toString();
       para = $('body w[xml\\:id="' + target[0] + '"]').parent().toString();
       prevAllW = $(firstWord).prevAll();
       nextAllW = $(firstWord).nextAll();
@@ -85,14 +75,10 @@ module.exports = function(options,config) {
       sentence = sentence.toString();
 
       // Add elements to OBJ
-      obj.title = input.basename;
-      obj.corresp = corresp;
-      obj.target = target;
-      obj.sentence = sentence;
-      obj.para = para;
-
-      // Remove BIG & USELESS XML content
-      delete obj.content.xml;
+      obj.content.corresp = corresp;
+      obj.content.target = target;
+      obj.content.sentence = sentence;
+      obj.content.para = para;
 
       // Check if submited not > processor Nb
       var qeSubmit = submit(obj , function(){
@@ -104,10 +90,21 @@ module.exports = function(options,config) {
         if (qeSubmit.length() > maxProcess) {
           setTimeout(delayed, delay);
         }
-      }
+        else{ 
+          //Call next element
+          next();
+        }
+      };
 
-      console.info(kuler(i , "orange") + '  / ' +  words.length + ' sent \r');
-    }
-    submit();
+    },
+    function(err){
+      // Last callback send all submited elements
+      if(!err){
+        console.info(kuler("Subdocuments sent !" , "green"));
+        submit();
+        return;
+      }
+      console.info(kuler(err , "red"));
+    })
   }
 };
