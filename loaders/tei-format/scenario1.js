@@ -31,21 +31,22 @@ module.exports = function(options,config) {
     // Remove BIG & USELESS XML content
     delete input.content.xml;
 
-    var words = $('spanGrp[type="candidatsTermes"] span').filter('[target],[corresp],[ana~="#DM4"],[ana~="#DAOn"]'),
-        firstWord,
-        endWord,
-        para,
-        sentence,
-        target,
-        corresp,
-        lemma,
-        prevAllW,
-        nextAllW,
-        prevW,
-        nextW;
+    var words = $('spanGrp[type="candidatsTermes"] span').filter('[target],[corresp],[ana~="#DM4"],[ana~="#DAOn"]');
 
     // For each span in file
     async.each(words , function(word,next){
+
+      var firstWord,
+          endWord,
+          para,
+          sentence,
+          target,
+          corresp,
+          lemma,
+          prevAllW,
+          nextAllW,
+          prevW,
+          nextW;
 
       target = $(word).attr("target").replace(/#/g , "").split(" ");
       firstWord = $('body w[xml\\:id="' + target[0] + '"]');
@@ -60,7 +61,8 @@ module.exports = function(options,config) {
       var obj = clone(input,false);
 
       endWord = (target.length > 1) ? $('body w[xml\\:id="' + target[target.length - 1] + '"]') : firstWord;
-      corresp = $(word).attr("corresp").replace(/#/g , "").toString();
+      corresp = $(word).attr("corresp").replace(/#entry-/g , "").toString();
+      lemma   = $(word).attr("lemma").toString();
       para = $('body w[xml\\:id="' + target[0] + '"]').parent().toString();
       prevAllW = $(firstWord).prevAll();
       nextAllW = $(firstWord).nextAll();
@@ -79,22 +81,34 @@ module.exports = function(options,config) {
       obj.content.target = target;
       obj.content.sentence = sentence;
       obj.content.para = para;
+      obj.content.lemma = lemma;
 
       // Check if submited not > processor Nb
-      var qeSubmit = submit(obj , function(){
-        delayed();
-      });
+      var qeSubmit = submit(obj);
+      var timeoutID;
+
+      // console.info(kuler("First Quantity : " + qeSubmit.length()), "violet");
 
       var delayed = function() {
+        // console.info(kuler("Fonction delayed : " + qeSubmit.length()), "cyan");
+        clearTimeout(timeoutID);
         // If nb Of submit elements greater than processor nb
-        if (qeSubmit.length() > maxProcess) {
-          setTimeout(delayed, delay);
-        }
-        else{ 
-          //Call next element
-          next();
-        }
+        timeoutID = setTimeout(function(){
+          // console.info(kuler("Callback de TimeOut : " + qeSubmit.length()), "pink");
+          if (qeSubmit.length() < maxProcess) {
+            // console.info(kuler("CB timeOut , Ok on peut passer a un autre mot ! : " + qeSubmit.length()), "green");
+            next();
+          } else {
+            // console.info(kuler("CB timeOut , mince Qe trop elevé encore  ... on rappel delayed : " + qeSubmit.length()), "pink");
+            delayed();
+          }
+        }, delay);
       };
+
+      if (qeSubmit.length() >= maxProcess) { 
+        // console.info(kuler("Quantité trop élevé detectée , on lance la fonciton delayed : " + qeSubmit.length()), "orange");
+        delayed(); 
+      }
 
     },
     function(err){
@@ -102,7 +116,6 @@ module.exports = function(options,config) {
       if(!err){
         console.info(kuler("Subdocuments sent !" , "green"));
         submit();
-        return;
       }
       console.info(kuler(err , "red"));
     })

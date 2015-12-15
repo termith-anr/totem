@@ -53,59 +53,7 @@ module.exports = function(config) {
             .each(function(err, item){
                 if(!err && item){
                     console.info("Fichier -> ", item.basename );
-                    var dataText = item.text.split("//"),
-                        ana      = dataText[1].toLowerCase(),
-                        corresp  = dataText[2],
-                        target   = (dataText[0].replace("#" , "").split(" ").length > 1) ? dataText[0].replace("#" , "").split(" ")[0] : dataText[0].replace("#" , ""),
-                        lemma    = dataText[3];
-
-                    console.info("target : " , target); 
-
-                    var $ = cheerio.load(item.content.xml.toString(), {xmlMode: true}),
-                        w = $('body w[xml\\:id="' + target + '"]');
-                    
-                    if(!w.length > 0 ){
-                        console.info('Pas de W dans le body sur ce doc');
-                        return;
-                    }
-
-                    var word = w.attr("nb" , 0),
-                        p = w.parent(),
-                        prevAllW = w.prevAll(),
-                        nextAllW = w.nextAll(),
-                        nextW = "",
-                        prevW = "",
-                        sentence = word,
-                        classW;
-
-                    //console.info("prevAll " , prevAllW.length , " nextAll " , nextAllW.length);
-
-                    for(i = 0 ; i < 6 ; i++){
-                        //console.info("i n° " , i , " prevvI : " , prevAllW[i]);
-                        // if(prevAllW[i]){
-                        //     console.info("On est dans prevall");
-                        //     prevW = ($(prevAllW[i]).attr("wsAfter") === "true") ? $(prevAllW[i]).text() + " "  :  $(prevAllW[i]).text() ;
-                        // }
-                        // if(nextAllW[i]){
-                        //     console.info("On est dans nextvall");
-                        //     nextW = ($(nextAllW[i]).attr("wsAfter") === "true") ? $(nextAllW[i]).text() + " "  :  $(nextAllW[i]).text() ;
-                        // }
-                        prevW  = (prevAllW[i]) ? $(prevAllW[i]).attr("nb" , i+1) : "";
-                        nextW  = (nextAllW[i]) ? $(nextAllW[i]).attr("nb" , i+1) : "";
-                        sentence = prevW + sentence + nextW;
-                    }
-                    obj = {
-                        "wid" : item.wid,
-                        "target" : target,
-                        "word" : [word],
-                        "lemma" : lemma,
-                        "title" : item.fields.title,
-                        "p" : [p],
-                        "sentence" : sentence
-                    }
-                    
-                    arr.push(obj);
-                    
+                    console.info("target : " , item.content.target);                  
                 }
                 else{
                     db.close();
