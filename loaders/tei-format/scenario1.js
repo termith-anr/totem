@@ -16,8 +16,8 @@ var objectPath = require('object-path'),
 
 module.exports = function(options,config) {
 
-  var maxProcess  = (config.concurrency)  ? config.concurrency : 2 ,
-      delay = 350,
+  var maxProcess  = (config.concurrency)  ? config.concurrency : 1 ,
+      delay = config.delay || 100,
       $;
       options = options || {};
       config = config.get() || {};
@@ -32,10 +32,16 @@ module.exports = function(options,config) {
     // Remove BIG & USELESS XML content
     delete input.content.xml;
 
-    var words = $('spanGrp[type="candidatsTermes"] span').filter('[target],[corresp],[ana~="#DM4"],[ana~="#DAOn"]');
+    var wordsObj = $('spanGrp[type="candidatsTermes"] span').filter('[target],[corresp],[ana~="#DM4"],[ana~="#DAOn"]'),
+        words = [];
 
-    // For each span in file ~Seems does not work
-    async.each(words , function(word,next){
+    for (var i = 0; i < wordsObj.length ; i++) {
+      words[i] = wordsObj[i];
+    }
+    console.info("words : " , words.length);
+
+    //For each span in file ~Seems does not work
+    async.eachSeries(words , function(word,next){
 
       var firstWord,
           endWord,
@@ -84,19 +90,24 @@ module.exports = function(options,config) {
       obj.content.para = para;
       obj.content.lemma = lemma;
 
-      // Check if submited not > processor Nb
-      var qeSubmit = submit(obj);
-      var checkQe = function(){
-        if(qeSubmit.length() < maxProcess){
-          return true;
-        }
-        return false;
+      var qe,
+          timeoutID;
+
+      var pause = function (resume) {
+        clearTimeout(timeoutID);
+        timeoutID = setTimeout(function() {
+            if (qe.length() < maxProcess) {
+              resume();
+            } else {
+              pause(resume);
+            }
+        }, delay);
       };
 
-      if (qeSubmit.length() >= maxProcess) { 
-        wait.waitUntil(checkQe , delay , function() {
-          next();
-        });
+      qe = submit(obj);
+      console.info("Target envoyé : " , obj.content.target  , "(" , obj.basename , ")");
+      if (qe.length() >= maxProcess) {
+        pause(next);
       }
     },
     function(err){
@@ -107,6 +118,6 @@ module.exports = function(options,config) {
         return;
       }
       console.info(kuler(err , "red"));
-    })
+    });
   }
 };

@@ -7,11 +7,6 @@ module.exports = function(config) {
 
 	return function(req,res){
 
-        if(config.get("teiFormat") !== "scenario1" ){
-            res.render('index.html', { info : "Impossible d'utiliser TOTEM avec ces fichiers , veuillez préciser le format" });
-            return
-        }
-
         if(!req.params.xmlid || (req.params.xmlid === undefined)){
             res.render('index.html');
             return;
