@@ -11,12 +11,13 @@ var objectPath = require('object-path'),
     clone = require('clone'),
     kuler = require('kuler'),
     async = require('async'),
-    _ = require('lodash');
+    _ = require('lodash'),
+    wait = require('wait');
 
 module.exports = function(options,config) {
 
   var maxProcess  = (config.concurrency)  ? config.concurrency : 2 ,
-      delay = config.delay || 100,
+      delay = 350,
       $;
       options = options || {};
       config = config.get() || {};
@@ -33,7 +34,7 @@ module.exports = function(options,config) {
 
     var words = $('spanGrp[type="candidatsTermes"] span').filter('[target],[corresp],[ana~="#DM4"],[ana~="#DAOn"]');
 
-    // For each span in file
+    // For each span in file ~Seems does not work
     async.each(words , function(word,next){
 
       var firstWord,
@@ -85,37 +86,25 @@ module.exports = function(options,config) {
 
       // Check if submited not > processor Nb
       var qeSubmit = submit(obj);
-      var timeoutID;
-
-      // console.info(kuler("First Quantity : " + qeSubmit.length()), "violet");
-
-      var delayed = function() {
-        // console.info(kuler("Fonction delayed : " + qeSubmit.length()), "cyan");
-        clearTimeout(timeoutID);
-        // If nb Of submit elements greater than processor nb
-        timeoutID = setTimeout(function(){
-          // console.info(kuler("Callback de TimeOut : " + qeSubmit.length()), "pink");
-          if (qeSubmit.length() < maxProcess) {
-            // console.info(kuler("CB timeOut , Ok on peut passer a un autre mot ! : " + qeSubmit.length()), "green");
-            next();
-          } else {
-            // console.info(kuler("CB timeOut , mince Qe trop elevé encore  ... on rappel delayed : " + qeSubmit.length()), "pink");
-            delayed();
-          }
-        }, delay);
+      var checkQe = function(){
+        if(qeSubmit.length() < maxProcess){
+          return true;
+        }
+        return false;
       };
 
       if (qeSubmit.length() >= maxProcess) { 
-        // console.info(kuler("Quantité trop élevé detectée , on lance la fonciton delayed : " + qeSubmit.length()), "orange");
-        delayed(); 
+        wait.waitUntil(checkQe , delay , function() {
+          next();
+        });
       }
-
     },
     function(err){
       // Last callback send all submited elements
       if(!err){
         console.info(kuler("Subdocuments sent !" , "green"));
         submit();
+        return;
       }
       console.info(kuler(err , "red"));
     })
