@@ -26,8 +26,7 @@ module.exports = function(config) {
         console.info("skip : " , skip);
 
 
-        var arr = [], // final array containing all objs
-            obj = {}, // temps obj use in loop
+        var obj = {}, // Contian all items
             title,
             target;
 
@@ -45,40 +44,28 @@ module.exports = function(config) {
             //    ]
             // )
             .find({"content.corresp" : req.params.xmlid } , {content : 1 , basename : 1})
+            .limit( 5 )
             .each(function(err, item){
                 if(!err && item){
-                    console.info("Fichier -> ", item.basename );
-                    console.info("target : " , item.content.target);                  
+                    if(!(obj[item.basename]) || !(Array.isArray(obj[item.basename]))){
+                        obj[item.basename] = [];
+                    }
+                    obj[item.basename].push(item.content);
+                    // console.info("Fichier -> ", item.basename );
+                    // console.info("target : " , item.content.target); 
+                    console.info("obj : " , Object.keys(obj).length);                 
                 }
                 else{
                     db.close();
                     if(!err){
-                        if(!arr.length > 0){
+                        if(!(Object.keys(obj).length > 0)){
                             res.render('index.html', { info : "Ce terme n'a pas été desambiguisé Ou la page n'existe pas" });
                             return;
                         }
+                        console.info("lemma : " , obj[Object.keys(obj)[0]][0].lemma);
                         var words = [],
-                            lemma = arr[0].lemma;
-                        for (var i = 0; i < arr.length; i++) {
-                            words = _.union(words , arr[i].word);
-                            delete arr[i].word;
-                        };
-                        arr = _.groupBy(arr, "title");
-                        console.info("arrBefore : " , arr);
-
-                        var p = [];
-                        _.each(arr , function(element,index){
-                            for(i  = 0 ; i < element.length ; i++){
-                                p  = _.union(p , element[0].p);
-                            }
-                            //console.info("Element  : " , element);
-                            //onsole.info("p " , p);
-                            element["title"] = p;
-                            p = [];
-                        })
-                        console.info("arr : " , arr);
-                        console.info("words: " , words);
-                        res.render('index.html', { page : page , id : req.params.xmlid,  words : words , lemma : lemma , objs : arr });
+                            lemma = obj[Object.keys(obj)[0]][0].lemma;
+                        res.render('index.html', { page : page , id : req.params.xmlid, lemma : lemma , objs : obj });
                     }
                     else{
                         console.info("err : " , err);

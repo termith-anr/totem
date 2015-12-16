@@ -38,7 +38,7 @@ module.exports = function(options,config) {
     for (var i = 0; i < wordsObj.length ; i++) {
       words[i] = wordsObj[i];
     }
-    console.info("words : " , words.length);
+    // console.info("words : " , words.length);
 
     //For each span in file ~Seems does not work
     async.eachSeries(words , function(word,next){
@@ -105,7 +105,7 @@ module.exports = function(options,config) {
       };
 
       qe = submit(obj);
-      console.info("Target envoyé : " , obj.content.target  , "(" , obj.basename , ")");
+      // console.info("Target envoyé : " , obj.content.target  , "(" , obj.basename , ")");
       if (qe.length() >= maxProcess) {
         pause(next);
       }
@@ -113,7 +113,7 @@ module.exports = function(options,config) {
     function(err){
       // Last callback send all submited elements
       if(!err){
-        console.info(kuler("Subdocuments sent !" , "green"));
+        // console.info(kuler("Subdocuments sent !" , "green"));
         submit();
         return;
       }
