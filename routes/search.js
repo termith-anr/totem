@@ -1,4 +1,5 @@
 var mongo = require("mongodb").MongoClient,
+    kuler = require("kuler"),
     _ = require("lodash");
 
 module.exports = function(config) {
@@ -44,7 +45,7 @@ module.exports = function(config) {
             //    ]
             // )
             .find({"content.corresp" : req.params.xmlid } , {content : 1 , basename : 1})
-            .limit( 5 )
+            .limit(5)
             .each(function(err, item){
                 if(!err && item){
                     if(!(obj[item.basename]) || !(Array.isArray(obj[item.basename]))){
@@ -56,9 +57,11 @@ module.exports = function(config) {
                     console.info("obj : " , Object.keys(obj).length);                 
                 }
                 else{
+                    console.info(kuler("plus d'item  !" , "red"));
                     db.close();
                     if(!err){
                         if(!(Object.keys(obj).length > 0)){
+                            console.info(kuler("Envoie des item  !" , "blue"));
                             res.render('index.html', { info : "Ce terme n'a pas été desambiguisé Ou la page n'existe pas" });
                             return;
                         }

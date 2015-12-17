@@ -9,6 +9,15 @@
 
 {% block content %}
 
+<div class="jumbotron">
+  {% if lemma %}
+    <h4 id="resultsTitle">Résultats pour : <span class="word2Search">{{ lemma }}</span></h4>
+  {% elif info %}
+    <h4 id="info">{{ info }}</h4>
+  {% endif %}
+</div>
+
+
 {% if not objs %}
 <div class="container">
   <div class="row">
@@ -22,13 +31,6 @@
 
 
 {% else %}
-<div class="jumbotron">
-  {% if lemma %}
-    <h4 id="resultsTitle">Résultats pour : <span class="word2Search">{{ lemma }}</span></h4>
-  {% elif info %}
-    <h4 id="info">{{ info }}</h4>
-  {% endif %}
-</div>
 
 <div class="container containerUL">
   {% for title, items in objs %}
