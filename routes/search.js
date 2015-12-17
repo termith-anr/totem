@@ -18,12 +18,9 @@ module.exports = function(config) {
             return;
         }
 
-		var xmlid      = req.params.xmlid ? ("\"#entry-" + req.params.xmlid + "\"") : null,
-            xmlidRegex = req.params.xmlid ? ".*#DM4.*#entry-" + req.params.xmlid + "| .*#DAOn.*#entry-" + req.params.xmlid: null,
-            page = req.params.page ?  parseInt(req.params.page)  : 1,
+		var page = req.params.page ?  parseInt(req.params.page)  : 1,
             skip = (Number.isInteger(page) && page > 1) ? (page - 1)*50 +1 : 0 ;
 
-        console.info("Recherche sur l'id : " , xmlid , " , patientez ..." , "page nb : " , req.params.page);
         console.info("skip : " , skip);
 
 
@@ -34,18 +31,9 @@ module.exports = function(config) {
         mongo.connect(config.get('connectionURI'), function(err, db) {
             //console.log("Connected correctly to server");
             db.collection(config.get('collectionName'))
-            // .aggregate(
-            //    [
-            //      { $match: { $text: { $search: xmlid } } },
-            //      { $project : { _id : 0 , basename : 1, text : 1 , "fields.title" : 1 , "content.xml" : 1 , wid : 1}},
-            //      { $unwind : "$text" },
-            //      { $match : { text : { $regex: xmlidRegex } } },
-            //      { $skip : skip }, // Should get the number to skip
-            //      { $limit: 50 } //  Sould Get a limit via ajax
-            //    ]
-            // )
             .find({"content.corresp" : req.params.xmlid } , {content : 1 , basename : 1})
-            .limit(5)
+            .skip(skip)
+            .limit(20)
             .each(function(err, item){
                 if(!err && item){
                     if(!(obj[item.basename]) || !(Array.isArray(obj[item.basename]))){
@@ -57,15 +45,12 @@ module.exports = function(config) {
                     console.info("obj : " , Object.keys(obj).length);                 
                 }
                 else{
-                    console.info(kuler("plus d'item  !" , "red"));
                     db.close();
                     if(!err){
                         if(!(Object.keys(obj).length > 0)){
-                            console.info(kuler("Envoie des item  !" , "blue"));
                             res.render('index.html', { info : "Ce terme n'a pas été desambiguisé Ou la page n'existe pas" });
                             return;
                         }
-                        console.info("lemma : " , obj[Object.keys(obj)[0]][0].lemma);
                         var words = [],
                             lemma = obj[Object.keys(obj)[0]][0].lemma;
                         res.render('index.html', { page : page , id : req.params.xmlid, lemma : lemma , objs : obj });

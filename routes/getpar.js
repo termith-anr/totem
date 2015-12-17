@@ -25,31 +25,22 @@ module.exports = function(config) {
         console.info("Recherche le doc : " , req.params.wid , " , id : " , req.params.target);
 
         var p,
-            wid = req.params.wid,
+            nb = req.params.wid,
             target = req.params.target;
 
         mongo.connect(config.get('connectionURI'), function(err, db) {
             //console.log("Connected correctly to server");
             db.collection(config.get('collectionName'))
-            .find({ wid : wid } , {_id : 0 , "content.xml" : 1})
+            .find({ "content.nb" : nb } , {_id : 0 , "content.para" : 1})
             .each(function(err, item){
                 if(!err && item){
 
-                    console.info("target : " , 'body w[xml\\:id="' + target + '"]');
-
-                    var $ = cheerio.load(item.content.xml.toString(), {xmlMode: true}),
-                        w = $('body w[xml\\:id="' + target + '"]');
-
-                    console.info("w " , w);
-
-                    w.addClass("wordToSearch");
-
-                    if(!(w.length > 0)){
+                    if(!(item.content.para)){
                         console.info('Pas de W dans le body sur ce doc');
                         return;
                     }
 
-                    p = w.parent().toString();                    
+                    p = item.content.para.toString();                    
                 }
                 else{
                     db.close();

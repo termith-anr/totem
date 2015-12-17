@@ -17,14 +17,13 @@ var objectPath = require('object-path'),
 module.exports = function(options,config) {
 
   var maxProcess  = (config.concurrency)  ? config.concurrency : 1 ,
-      delay = config.delay || 100,
-      $;
+      delay = config.delay || 100;
       options = options || {};
       config = config.get() || {};
 
   return function (input, submit) {
     //Load Cheerio on xml DOC input
-    $ = cheerio.load(input.content.xml.toString(), {
+    var $ = cheerio.load(input.content.xml.toString(), {
       normalizeWhitespace: true,
       xmlMode: true
     });
@@ -53,7 +52,8 @@ module.exports = function(options,config) {
           prevAllW,
           nextAllW,
           prevW,
-          nextW;
+          nextW,
+          askedWord = "";
 
       target = $(word).attr("target").replace(/#/g , "").split(" ");
       firstWord = $('body w[xml\\:id="' + target[0] + '"]');
@@ -70,10 +70,22 @@ module.exports = function(options,config) {
       endWord = (target.length > 1) ? $('body w[xml\\:id="' + target[target.length - 1] + '"]') : firstWord;
       corresp = $(word).attr("corresp").replace(/#entry-/g , "").toString();
       lemma   = $(word).attr("lemma").toString();
-      para = $('body w[xml\\:id="' + target[0] + '"]').parent().toString();
+      para = $('body w[xml\\:id="' + target[0] + '"]').parent();
       prevAllW = $(firstWord).prevAll();
       nextAllW = $(firstWord).nextAll();
-      sentence = firstWord;
+
+      //Create asked words and add attribut nb
+      for(var i = 0 ; i < target.length ; i++){
+        askedWord = askedWord + $('body w[xml\\:id="' + target[i] + '"]').attr("nb" , "0");
+        $('w[xml\\:id="' + target[i] + '"]' , para).attr("nb" , "0");
+        console.info("nom : ",  input.basename , "corresp : "  , corresp , "i : " ,  i  , "  target  :  " , target[i] , " askedWord : " , askedWord);
+
+      }
+
+      sentence = askedWord;
+      para = para.toString();
+
+      // console.info("Asked words : " , askedWord);
 
       //Get only 6 next & prev words
       for(var j = 0 ; j < 6 ; j++){
@@ -81,6 +93,8 @@ module.exports = function(options,config) {
         nextW  = (nextAllW[j]) ? $(nextAllW[j]).attr("nb" , j+1) : "";
         sentence = prevW + sentence + nextW;
       }
+
+
       sentence = sentence.toString();
 
       // Add elements to OBJ
@@ -89,6 +103,8 @@ module.exports = function(options,config) {
       obj.content.sentence = sentence;
       obj.content.para = para;
       obj.content.lemma = lemma;
+      obj.content.words = askedWord.toString();
+      obj.content.nb = obj.fid + "" + words.indexOf(word) ;
 
       var qe,
           timeoutID;
