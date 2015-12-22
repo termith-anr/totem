@@ -29,15 +29,12 @@ module.exports = function(options,config) {
       // console.info("RETURN FUNCTION pour : " , config.concurrency);
 
     //Load Cheerio on xml DOC input
-    var $ = cheerio.load(input.content.xml.toString(), {
+    var xml = cheerio.load(input.content.xml.toString(), {
       normalizeWhitespace: true,
       xmlMode: true
     });
 
-    // Remove BIG & USELESS XML content
-    delete input.content.xml;
-
-    var wordsObj = $('spanGrp[type="candidatsTermes"] span').filter('[target],[corresp],[ana~="#DM4"],[ana~="#DAOn"]'),
+    var wordsObj = xml('spanGrp[type="candidatsTermes"] span').filter('[target],[corresp],[ana~="#DM4"],[ana~="#DAOn"]'),
         words = [];
 
     for (var i = 0; i < wordsObj.length ; i++) {
@@ -47,6 +44,14 @@ module.exports = function(options,config) {
 
     //For each span in file ~ Seems does not work
     async.eachSeries(words , function(word,next){
+
+      // Build clone of input file
+      var obj = clone(input,false);
+
+      var $ = cheerio.load(obj.content.xml.toString(), {
+        normalizeWhitespace: true,
+        xmlMode: true
+      });
 
       var firstWord,
           endWord,
@@ -76,13 +81,12 @@ module.exports = function(options,config) {
       // console.info(kuler("On traite " + words.indexOf(word) , "green") + "/" + words.length + " pour " + input.basename);
 
 
-      // Build clone of input file
-      var obj = clone(input,false);
+      
 
       endWord = (target.length > 1) ? $('w[xml\\:id="' + target[target.length - 1] + '"]') : firstWord;
       corresp = $(word).attr("corresp").replace(/#entry-/g , "").toString();
       lemma   = $(word).attr("lemma").toString();
-      para = $('w[xml\\:id="' + target[0] + '"]').parent();
+      para = $('w[xml\\:id="' + target[0] + '"]').parent().length > 12 ? $('w[xml\\:id="' + target[0] + '"]').parent() : $('w[xml\\:id="' + target[0] + '"]').parents("p").first();
       prevAllW = $(firstWord).prevAll();
       nextAllW = $(firstWord).nextAll();
 
@@ -117,6 +121,9 @@ module.exports = function(options,config) {
       obj.content.lemma = lemma;
       obj.content.words = askedWord.toString();
       obj.content.nb = obj.fid + "" + words.indexOf(word) ;
+
+      // Remove BIG & USELESS XML content
+      delete obj.content.xml;
 
       var qe,
           timeoutID;
