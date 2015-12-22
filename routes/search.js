@@ -35,7 +35,7 @@ module.exports = function(config) {
                 db.collection(config.get('collectionName'))
                 .find({"content.corresp" : req.params.xmlid } , {content : 1 , basename : 1})
                 .skip(skip)
-                .limit(20)
+                .limit(50)
                 .each(function(err, item){
                     if(!err && item){
                         if(!(obj[item.basename]) || !(Array.isArray(obj[item.basename]))){
