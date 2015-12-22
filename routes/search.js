@@ -26,41 +26,44 @@ module.exports = function(config) {
 
         var obj = {}, // Contian all items
             title,
-            target;
+            target,
+            count;
 
         mongo.connect(config.get('connectionURI'), function(err, db) {
             //console.log("Connected correctly to server");
-            db.collection(config.get('collectionName'))
-            .find({"content.corresp" : req.params.xmlid } , {content : 1 , basename : 1})
-            .skip(skip)
-            .limit(20)
-            .each(function(err, item){
-                if(!err && item){
-                    if(!(obj[item.basename]) || !(Array.isArray(obj[item.basename]))){
-                        obj[item.basename] = [];
-                    }
-                    obj[item.basename].push(item.content);
-                    // console.info("Fichier -> ", item.basename );
-                    // console.info("target : " , item.content.target); 
-                    console.info("obj : " , Object.keys(obj).length);                 
-                }
-                else{
-                    db.close();
-                    if(!err){
-                        if(!(Object.keys(obj).length > 0)){
-                            res.render('index.html', { info : "Ce terme n'a pas été desambiguisé Ou la page n'existe pas" });
-                            return;
+            db.collection(config.get('collectionName')).count({"content.corresp" : req.params.xmlid }, function(err, totalDoc){
+                db.collection(config.get('collectionName'))
+                .find({"content.corresp" : req.params.xmlid } , {content : 1 , basename : 1})
+                .skip(skip)
+                .limit(20)
+                .each(function(err, item){
+                    if(!err && item){
+                        if(!(obj[item.basename]) || !(Array.isArray(obj[item.basename]))){
+                            obj[item.basename] = [];
                         }
-                        var words = [],
-                            lemma = obj[Object.keys(obj)[0]][0].lemma;
-                        res.render('index.html', { page : page , id : req.params.xmlid, lemma : lemma , objs : obj });
+                        obj[item.basename].push(item.content);
+                        // console.info("Fichier -> ", item.basename );
+                        // console.info("target : " , item.content.target); 
+                        console.info("obj : " , Object.keys(obj).length);                 
                     }
                     else{
-                        console.info("err : " , err);
+                        db.close();
+                        if(!err){
+                            if(!(Object.keys(obj).length > 0)){
+                                res.render('index.html', { info : "Ce terme n'a pas été desambiguisé Ou la page n'existe pas" });
+                                return;
+                            }
+                            var words = [],
+                                lemma = obj[Object.keys(obj)[0]][0].lemma;
+                            res.render('index.html', { page : page , id : req.params.xmlid, lemma : lemma , totalDoc : totalDoc, objs : obj });
+                        }
+                        else{
+                            console.info("err : " , err);
+                        }
                     }
-                }
-            })
-
+                });
+            });
+            
         });
 
 	};
