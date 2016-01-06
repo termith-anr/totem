@@ -98,20 +98,22 @@ $(document).ready(function() {
         url: "/getpar/" +  wid + "/" + target
       })
       .done(function(data){
-        if(data.p){
-          console.log("Il y a un P a ajouter");
-          html = '<div id="' + target + '" class="modal bottom-sheet">\
-            <div class="modal-content">\
-              <h4>Paragraphe</h4>\
-              <p>' + data.p + '</p>\
-            </div>\
-            <div class="modal-footer">\
-              <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Fermer</a>\
-            </div>\
-          </div>';
-          $(parent).append(html);
-          $("#" + target).openModal();
+        if(!data.p){
+          alert("La paragraphe parent semble introuvable");
+          return;
         }
+        console.log("Il y a un P a ajouter");
+        html = '<div id="' + target + '" class="modal bottom-sheet">\
+          <div class="modal-content">\
+            <h4>Paragraphe</h4>\
+            <p>' + data.p + '</p>\
+          </div>\
+          <div class="modal-footer">\
+            <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Fermer</a>\
+          </div>\
+        </div>';
+        $(parent).append(html);
+        $("#" + target).openModal();
       });
     });
   }

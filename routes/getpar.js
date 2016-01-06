@@ -9,10 +9,6 @@ module.exports = function(config) {
 
   return function(req,res){
 
-        if(config.get("teiFormat") !== "scenario1" ){
-            res.send({ info : "Impossible d'utiliser TOTEM avec ces fichiers , veuillez préciser le format." });
-            return
-        }
         if(!req.params.wid || (req.params.wid === undefined)){
             res.send({ info : "Aucun ID terme envoyé , merci d'en préciser un." });
             return;
@@ -21,8 +17,6 @@ module.exports = function(config) {
             res.send({ info : "Aucun target envoyé , merci d'en préciser un." });
             return;
         }
-
-        console.info("Recherche le doc : " , req.params.wid , " , id : " , req.params.target);
 
         var p,
             nb = req.params.wid,
@@ -46,7 +40,7 @@ module.exports = function(config) {
                     db.close();
                     if(!err){
                         if(!p){
-                            res.send({ info : "Le document n'a pas été trouvé" });
+                            res.send({ p : null });
                             return;
                         }
                         res.send({p : p});

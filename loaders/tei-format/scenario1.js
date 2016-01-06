@@ -11,8 +11,7 @@ var objectPath = require('object-path'),
     clone = require('clone'),
     kuler = require('kuler'),
     async = require('async'),
-    _ = require('lodash'),
-    wait = require('wait');
+    _ = require('lodash');
 
 module.exports = function(options,config) {
 
@@ -86,7 +85,7 @@ module.exports = function(options,config) {
       endWord = (target.length > 1) ? $('w[xml\\:id="' + target[target.length - 1] + '"]') : firstWord;
       corresp = $(word).attr("corresp").replace(/#entry-/g , "").toString();
       lemma   = $(word).attr("lemma").toString();
-      para = $('w[xml\\:id="' + target[0] + '"]').parent().length > 12 ? $('w[xml\\:id="' + target[0] + '"]').parent() : $('w[xml\\:id="' + target[0] + '"]').parents("p").first();
+      para = (($('w[xml\\:id="' + target[0] + '"]').parent().children().length < 12) && ($('w[xml\\:id="' + target[0] + '"]').closest("p").children().length > 12)) ?  $('w[xml\\:id="' + target[0] + '"]').closest("p") :  $('w[xml\\:id="' + target[0] + '"]').parent();
       prevAllW = $(firstWord).prevAll();
       nextAllW = $(firstWord).nextAll();
 
@@ -95,11 +94,18 @@ module.exports = function(options,config) {
         askedWord = askedWord + $('w[xml\\:id="' + target[i] + '"]').attr("nb" , "0");
         $('w[xml\\:id="' + target[i] + '"]' , para).attr("nb" , "0");
         // console.info("nom : ",  input.basename , "corresp : "  , corresp , "i : " ,  i  , "  target  :  " , target[i] , " askedWord : " , askedWord);
-
       }
 
       sentence = askedWord;
       para = para.toString();
+      para = para.replace(/<head/g, "<div");
+      para = para.replace(/<\/head>/g, "</div>");
+      para = para.replace(/<title/g, "<h4");
+      para = para.replace(/<\/title>/g, "</h4>");
+      para = para.replace(/<hi/g, "<i");
+      para = para.replace(/<\/hi>/g, "</i>");
+      para = para.replace(/<note/g, "<div");
+      para = para.replace(/<\/note>/g, "</div>");
 
       // console.info("Asked words : " , askedWord);
 
