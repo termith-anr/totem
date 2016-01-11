@@ -87,11 +87,11 @@ $(document).ready(function() {
       console.log("clickkk");
       parent = $(this).parents(".collection-item").first();
 
-      target = $(this).attr("data-target").toString();
+      target = $(this).attr("data-target").replace("," , "").toString();
       wid = $(this).attr("data-wid").toString();
       // Si le p est deja present
-      if($("#" + target).length > 0){
-        $("#" + target).openModal();
+      if($("#" + wid + "-" + target).length > 0){
+        $("#" + wid + "-" + target).openModal();
         return;
       }
       $.ajax({
@@ -103,7 +103,7 @@ $(document).ready(function() {
           return;
         }
         console.log("Il y a un P a ajouter");
-        html = '<div id="' + target + '" class="modal bottom-sheet">\
+        html = '<div id="' + wid + "-" + target + '" class="modal bottom-sheet">\
           <div class="modal-content">\
             <h4>Paragraphe</h4>\
             <p>' + data.p + '</p>\
@@ -113,7 +113,7 @@ $(document).ready(function() {
           </div>\
         </div>';
         $(parent).append(html);
-        $("#" + target).openModal();
+        $("#" + wid + "-" + target).openModal();
       });
     });
   }

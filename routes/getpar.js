@@ -20,7 +20,9 @@ module.exports = function(config) {
 
         var p,
             nb = req.params.wid,
-            target = req.params.target;
+            target = req.params.target.split(",").length > 1  ? req.params.target.split(",") : req.params.target;
+
+        console.info("target : " , target);
 
         mongo.connect(config.get('connectionURI'), function(err, db) {
             //console.log("Connected correctly to server");
@@ -49,8 +51,7 @@ module.exports = function(config) {
                         console.info("err : " , err);
                     }
                 }
-            })
-
+            });
         });
 
   };
