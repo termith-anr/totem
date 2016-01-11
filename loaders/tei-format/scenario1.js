@@ -80,14 +80,12 @@ module.exports = function(options,config) {
       // console.info(kuler("On traite " + words.indexOf(word) , "green") + "/" + words.length + " pour " + input.basename);
 
 
-      
-
       endWord = (target.length > 1) ? $('w[xml\\:id="' + target[target.length - 1] + '"]') : firstWord;
       corresp = $(word).attr("corresp").replace(/#entry-/g , "").toString();
       lemma   = $(word).attr("lemma").toString();
       para = (($('w[xml\\:id="' + target[0] + '"]').parent().children().length < 12) && ($('w[xml\\:id="' + target[0] + '"]').closest("p").children().length > 12)) ?  $('w[xml\\:id="' + target[0] + '"]').closest("p") :  $('w[xml\\:id="' + target[0] + '"]').parent();
       prevAllW = $(firstWord).prevAll();
-      nextAllW = $(firstWord).nextAll();
+      nextAllW = $(endWord).nextAll();
 
       //Create asked words and add attribut nb
       for(var i = 0 ; i < target.length ; i++){
@@ -106,8 +104,6 @@ module.exports = function(options,config) {
       para = para.replace(/<\/hi>/g, "</i>");
       para = para.replace(/<note/g, "<div");
       para = para.replace(/<\/note>/g, "</div>");
-
-      // console.info("Asked words : " , askedWord);
 
       //Get only 6 next & prev words
       for(var j = 0 ; j < 6 ; j++){
