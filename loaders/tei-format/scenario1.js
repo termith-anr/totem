@@ -11,6 +11,7 @@ var objectPath = require('object-path'),
     clone = require('clone'),
     kuler = require('kuler'),
     async = require('async'),
+    clone = require('clone'),
     _ = require('lodash');
 
 module.exports = function(options,config) {
@@ -55,6 +56,7 @@ module.exports = function(options,config) {
       var firstWord,
           endWord,
           para,
+          parentE,
           sentence,
           target,
           corresp,
@@ -84,13 +86,16 @@ module.exports = function(options,config) {
       corresp = $(word).attr("corresp").replace(/#entry-/g , "").toString();
       lemma   = $(word).attr("lemma").toString();
       para = (($('w[xml\\:id="' + target[0] + '"]').parent().children().length < 12) && ($('w[xml\\:id="' + target[0] + '"]').closest("p").children().length > 12)) ?  $('w[xml\\:id="' + target[0] + '"]').closest("p") :  $('w[xml\\:id="' + target[0] + '"]').parent();
-      prevAllW = $(firstWord).prevAll();
-      nextAllW = $(endWord).nextAll();
+      
+      $('note').remove();
+
+      prevAllW = $(firstWord , $(parentE)).prevAll();
+      nextAllW = $(endWord , $(parentE)).nextAll();
 
       //Create asked words and add attribut nb
       for(var i = 0 ; i < target.length ; i++){
         askedWord = askedWord + $('w[xml\\:id="' + target[i] + '"]').attr("nb" , "0");
-        $('w[xml\\:id="' + target[i] + '"]' , para).attr("nb" , "0");
+        $('w[xml\\:id="' + target[i] + '"]' , $(parentE)).attr("nb" , "0");
         // console.info("nom : ",  input.basename , "corresp : "  , corresp , "i : " ,  i  , "  target  :  " , target[i] , " askedWord : " , askedWord);
       }
 

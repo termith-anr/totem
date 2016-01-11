@@ -23,6 +23,7 @@
     "castor-core": "^2.2.0",
     "castor-load-raw": "^1.0.0",
     "cheerio": "^0.19.0",
+    "clone": "^1.0.2",
     "kuler": "0.0.0",
     "lodash": "^3.10.1",
     "mongodb": "^2.0.42",
