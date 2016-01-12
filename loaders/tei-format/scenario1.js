@@ -26,8 +26,6 @@ module.exports = function(options,config) {
 
   return function (input, submit) {
 
-      // console.info("RETURN FUNCTION pour : " , config.concurrency);
-
     //Load Cheerio on xml DOC input
     var xml = cheerio.load(input.content.xml.toString(), {
       normalizeWhitespace: true,
@@ -56,7 +54,6 @@ module.exports = function(options,config) {
       var firstWord,
           endWord,
           para,
-          parentE,
           sentence,
           target,
           corresp,
@@ -87,15 +84,23 @@ module.exports = function(options,config) {
       lemma   = $(word).attr("lemma").toString();
       para = (($('w[xml\\:id="' + target[0] + '"]').parent().children().length < 12) && ($('w[xml\\:id="' + target[0] + '"]').closest("p").children().length > 12)) ?  $('w[xml\\:id="' + target[0] + '"]').closest("p") :  $('w[xml\\:id="' + target[0] + '"]').parent();
       
-      $('note').remove();
+      $('hi').each(function(i,el){
+        if($(this).attr('rend')){
+          var attribut = $(this).attr('rend');
+          $(this).children().each(function(){
+            $(this).attr('rend' , attribut);
+          });
+        }
+        $(this).replaceWith($(this).children());
+      });
 
-      prevAllW = $(firstWord , $(parentE)).prevAll();
-      nextAllW = $(endWord , $(parentE)).nextAll();
+      prevAllW = $(firstWord).prevAll();
+      nextAllW = $(endWord).nextAll();
 
       //Create asked words and add attribut nb
       for(var i = 0 ; i < target.length ; i++){
         askedWord = askedWord + $('w[xml\\:id="' + target[i] + '"]').attr("nb" , "0");
-        $('w[xml\\:id="' + target[i] + '"]' , $(parentE)).attr("nb" , "0");
+        $('w[xml\\:id="' + target[i] + '"]').attr("nb" , "0");
         // console.info("nom : ",  input.basename , "corresp : "  , corresp , "i : " ,  i  , "  target  :  " , target[i] , " askedWord : " , askedWord);
       }
 
@@ -111,11 +116,59 @@ module.exports = function(options,config) {
       para = para.replace(/<\/note>/g, "</div>");
 
       //Get only 6 next & prev words
-      for(var j = 0 ; j < 6 ; j++){
-        prevW  = (prevAllW[j]) ? $(prevAllW[j]).attr("nb" , j+1) : "";
-        nextW  = (nextAllW[j]) ? $(nextAllW[j]).attr("nb" , j+1) : "";
-        sentence = prevW + sentence + nextW;
-      }
+      // for(var j = 0 ; j < 6 ; j++){
+      //   prevW  = (prevAllW[j]) ? $(prevAllW[j]).attr("nb" , j+1) : "";
+      //   nextW  = (nextAllW[j]) ? $(nextAllW[j]).attr("nb" , j+1) : "";
+      //   sentence = prevW + sentence + nextW;
+      // }
+
+      var i , j = 0;
+      do{
+        // Si element exist
+        if(prevAllW[j]){
+          
+          prevW = $(prevAllW[j]);
+          //If its a word
+
+          if(prevW.is('w')){
+            prevW = prevW.attr("nb" , j+1);
+            sentence = prevW + sentence;
+            i++;
+          }
+          else if(!(prevW.is('note'))){
+            sentence = prevW + sentence ;
+          }
+          j++;
+        }
+        else{
+          break;
+        }
+      }while(i < 6)
+
+
+      i = 0;
+      j = 0;
+      do{
+        // Si element exist
+        if(nextAllW[j]){
+          
+          nextW = $(nextAllW[j]);
+          //If its a word
+          if(nextW.is('w')){
+            nextW = nextW.attr("nb" , j+1);
+            sentence = sentence + nextW;
+            i++;
+          }
+          else if(!(nextW.is('note'))){
+            sentence = sentence + nextW;
+          }
+          j++;
+        }
+        else{
+          break;
+        }
+      }while(i < 6)
+
 
 
       sentence = sentence.toString();

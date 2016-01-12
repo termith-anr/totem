@@ -66,6 +66,10 @@
 
 /* STYLE SENTENCE ELEMENTS */
 
+w, pc{
+  color: #607D8B;
+}
+
 [wsAfter="true"]{
   margin-right: 4px;
 }
@@ -80,6 +84,26 @@
 
 [nb="1"]{
   color : blue;
+}
+
+[rend="italic"]{
+  font-style: italic;
+}
+
+[rend="bold"]{
+  font-weight: bold;
+}
+
+[rend="sub"]{
+  font-size: 0.7em;
+  position: relative;
+  top : 6px;
+}
+
+[rend="sup"]{
+  font-size: 0.7em;
+  position: relative;
+  top : -6px;
 }
 
 .collection{
