@@ -87,7 +87,10 @@ $(document).ready(function() {
       console.log("clickkk");
       parent = $(this).parents(".collection-item").first();
 
-      target = $(this).attr("data-target").replace("," , "").toString();
+      target = $(this).attr("data-target").replace(/,/g , "").toString();
+
+      console.log("target : " , target);
+
       wid = $(this).attr("data-wid").toString();
       // Si le p est deja present
       if($("#" + wid + "-" + target).length > 0){
