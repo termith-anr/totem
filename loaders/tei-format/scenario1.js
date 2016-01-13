@@ -115,13 +115,6 @@ module.exports = function(options,config) {
       para = para.replace(/<note/g, "<div");
       para = para.replace(/<\/note>/g, "</div>");
 
-      //Get only 6 next & prev words
-      // for(var j = 0 ; j < 6 ; j++){
-      //   prevW  = (prevAllW[j]) ? $(prevAllW[j]).attr("nb" , j+1) : "";
-      //   nextW  = (nextAllW[j]) ? $(nextAllW[j]).attr("nb" , j+1) : "";
-      //   sentence = prevW + sentence + nextW;
-      // }
-
       var i , j = 0;
       do{
         // Si element exist
@@ -169,9 +162,11 @@ module.exports = function(options,config) {
         }
       }while(i < 6)
 
+      sentence = cheerio.load(sentence);
 
+      sentence('note').remove();
 
-      sentence = sentence.toString();
+      sentence = sentence.xml().toString();
 
       // Add elements to OBJ
       obj.content.corresp = corresp;

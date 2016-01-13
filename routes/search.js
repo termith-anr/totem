@@ -33,7 +33,7 @@ module.exports = function(config) {
             //console.log("Connected correctly to server");
             db.collection(config.get('collectionName')).count({"content.corresp" : req.params.xmlid }, function(err, totalDoc){
                 db.collection(config.get('collectionName'))
-                .find({"content.corresp" : req.params.xmlid } , {content : 1 , basename : 1})
+                .find({"content.corresp" : req.params.xmlid } , {content : 1 , basename : 1 , wid : 1 , number : 1})
                 .skip(skip)
                 .limit(50)
                 .each(function(err, item){
@@ -41,6 +41,8 @@ module.exports = function(config) {
                         if(!(obj[item.basename]) || !(Array.isArray(obj[item.basename]))){
                             obj[item.basename] = [];
                         }
+                        item.content.widdoc = item.wid;
+                        item.content.nid = item.number;
                         obj[item.basename].push(item.content);
                         // console.info("Fichier -> ", item.basename );
                         // console.info("target : " , item.content.target); 

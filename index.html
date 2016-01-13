@@ -37,11 +37,11 @@
   <ul class="collection toGet">
     <li class="collection-item avatar">
       {% if items|length > 1 %}<i class="circle grey white-text nbElements">{{ items|length }}</i>{% endif %}
-      <span class="title sentence" data-target="{{ items[0].target }}" data-wid="{{ items[0].nb }}">{{ items[0].sentence }} <br/></span>
+      <span class="title sentence" data-basename="{{title}}" data-target="{{ items[0].target }}" data-wid="{{ items[0].nb }}" data-docwid="{{items[0].widdoc}}" data-nb="{{items[0].nid}}">{{ items[0].sentence }} <br/></span>
     </li>
     {% if items|length > 1 %}
       {% for i in range(1,(items|length)) %}
-        <li class="collection-item subitems"><div class="sentence" data-target="{{ items[i].target }}" data-wid="{{ items[i].nb }}">{{items[i].sentence}}</div></li>
+        <li class="collection-item subitems"><div class="sentence" data-target="{{ items[i].target }}" data-wid="{{ items[i].nb }}" data-nb="{{items[i].nid}}">{{items[i].sentence}}</div></li>
       {% endfor %}
     {% endif %}
   </ul>
