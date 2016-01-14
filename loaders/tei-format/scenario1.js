@@ -62,7 +62,9 @@ module.exports = function(options,config) {
           nextAllW,
           prevW,
           nextW,
-          askedWord = "";
+          wBefore="",
+          wAfter="",
+          askedWord = "<span class='candidatsTermes'>";
 
       target = $(word).attr("target").replace(/#/g , "").split(" ");
       firstWord = $('w[xml\\:id="' + target[0] + '"]');
@@ -103,6 +105,7 @@ module.exports = function(options,config) {
         $('w[xml\\:id="' + target[i] + '"]').attr("nb" , "0");
         // console.info("nom : ",  input.basename , "corresp : "  , corresp , "i : " ,  i  , "  target  :  " , target[i] , " askedWord : " , askedWord);
       }
+      askedWord = askedWord + "</span>";
 
       sentence = askedWord;
       para = para.toString();
@@ -115,6 +118,8 @@ module.exports = function(options,config) {
       para = para.replace(/<note/g, "<div");
       para = para.replace(/<\/note>/g, "</div>");
 
+      wBefore = '</span>';
+
       var i , j = 0;
       do{
         // Si element exist
@@ -125,11 +130,11 @@ module.exports = function(options,config) {
 
           if(prevW.is('w')){
             prevW = prevW.attr("nb" , j+1);
-            sentence = prevW + sentence;
+            wBefore = prevW + wBefore;
             i++;
           }
           else if(!(prevW.is('note'))){
-            sentence = prevW + sentence ;
+            wBefore = prevW + wBefore ;
           }
           j++;
         }
@@ -138,7 +143,9 @@ module.exports = function(options,config) {
         }
       }while(i < 6)
 
+      sentence = '<span class="wBefore">' + wBefore + sentence ;
 
+      wAfter = '<span class="wAfter">'
       i = 0;
       j = 0;
       do{
@@ -149,11 +156,11 @@ module.exports = function(options,config) {
           //If its a word
           if(nextW.is('w')){
             nextW = nextW.attr("nb" , j+1);
-            sentence = sentence + nextW;
+            wAfter = wAfter + nextW;
             i++;
           }
           else if(!(nextW.is('note'))){
-            sentence = sentence + nextW;
+            wAfter = wAfter + nextW;
           }
           j++;
         }
@@ -161,6 +168,8 @@ module.exports = function(options,config) {
           break;
         }
       }while(i < 6)
+
+      sentence =  sentence + wAfter + '</span>';
 
       sentence = cheerio.load(sentence);
 
@@ -198,6 +207,7 @@ module.exports = function(options,config) {
       };
 
       qe = submit(obj);
+      console.info("qe : " , qe.length());
       if (qe.length() >= maxProcess) {
         // console.info(kuler("On lance fonction pause pour " + obj.basename + " length : " + qe.length() , "blue"));
         pause(next);
@@ -206,7 +216,7 @@ module.exports = function(options,config) {
     function(err){
       // Last callback send all submited elements
       if(!err){
-        // console.info(kuler("Subdocuments sent !" + " pour " + input.basename, "green"));
+        console.info(kuler("Subdocuments sent !" + " pour " + input.basename, "green"));
         submit();
       }
       console.info(kuler(err , "red"));
