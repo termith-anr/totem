@@ -84,7 +84,11 @@ module.exports = function(options,config) {
       endWord = (target.length > 1) ? $('w[xml\\:id="' + target[target.length - 1] + '"]') : firstWord;
       corresp = ($(word).attr("corresp") || '').replace(/#entry-/g , "").toString();
       lemma   = ($(word).attr("lemma") || '').toString();
-      para = (($('w[xml\\:id="' + target[0] + '"]').parent().children().length < 12) && ($('w[xml\\:id="' + target[0] + '"]').closest("p").children().length > 12)) ?  $('w[xml\\:id="' + target[0] + '"]').closest("p") :  $('w[xml\\:id="' + target[0] + '"]').parent();
+
+      var nbSiblings = firstWord.siblings().length;
+      var nbParaChildren = firstWord.closest("p").children().length;
+
+      para = (nbSiblings < 11 && nbParaChildren > 12) ? firstWord.closest("p") : firstWord.parent();
 
       $('hi').each(function(i,el){
         if($(this).attr('rend')){
