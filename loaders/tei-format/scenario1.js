@@ -16,8 +16,6 @@ var objectPath = require('object-path'),
 
 module.exports = function(options,config) {
 
-  console.info("passage export");
-
   options = options || {};
   config = config.get() || {};
 
@@ -38,7 +36,6 @@ module.exports = function(options,config) {
     for (var i = 0; i < wordsObj.length ; i++) {
       words[i] = wordsObj[i];
     }
-    // console.info("words : ", words.length);
 
     //For each span in file ~ Seems does not work
     async.eachSeries(words, function (word, next) {
@@ -69,16 +66,11 @@ module.exports = function(options,config) {
       target = ($(word).attr("target") || '').replace(/#/g , "").split(" ");
       firstWord = $('w[xml\\:id="' + target[0] + '"]');
 
-      // console.info("passage n° " + words.indexOf(word) + " pour " + input.basename );
 
       // If word not in body balise continue with other span
       if ($(firstWord).length < 1) {
-        // console.info(kuler("On ne traite pas " + words.indexOf(word) , "red") + "/" + words.length + " pour " + input.basename);
         return next();
       }
-
-      // console.info(kuler("On traite " + words.indexOf(word) , "green") + "/" + words.length + " pour " + input.basename);
-
 
       endWord = (target.length > 1) ? $('w[xml\\:id="' + target[target.length - 1] + '"]') : firstWord;
       corresp = ($(word).attr("corresp") || '').replace(/#entry-/g, "").toString();
@@ -106,7 +98,6 @@ module.exports = function(options,config) {
       for (var i = 0 ; i < target.length ; i++) {
         askedWord = askedWord + $('w[xml\\:id="' + target[i] + '"]').attr("nb" , "0");
         $('w[xml\\:id="' + target[i] + '"]').attr("nb" , "0");
-        // console.info("nom : ",  input.basename , "corresp : "  , corresp , "i : " ,  i  , "  target  :  " , target[i] , " askedWord : " , askedWord);
       }
       askedWord = askedWord + "</span>";
 
@@ -187,14 +178,11 @@ module.exports = function(options,config) {
       var qe, timeoutID;
 
       var pause = function (resume) {
-        // console.info(kuler("Fonction pause " + qe.length() + " / " + obj.basename , "orange"));
         clearTimeout(timeoutID);
         timeoutID = setTimeout(function() {
           if (qe.length() < maxProcess) {
-            // console.info(kuler("On peut continuer : " + qe.length() + " / " + obj.basename , "green"));
             resume();
           } else {
-            // console.info(kuler("On doit pausé : " + qe.length() + " / " + obj.basename , "red"));
             pause(resume);
           }
         }, delay);
@@ -213,7 +201,6 @@ module.exports = function(options,config) {
 
       // the last callback means that all documents have been submitted
       submit();
-      // console.info(kuler("Subdocuments sent !" + " pour " + input.basename, "green"));
     });
   }
 };
