@@ -5,23 +5,17 @@
  'use strict';
 
 // Required modules
-var objectPath = require('object-path'),
-    sha1 = require('sha1'),
-    cheerio = require('cheerio'),
+var cheerio = require('cheerio'),
     clone = require('clone'),
     kuler = require('kuler'),
-    async = require('async'),
-    clone = require('clone'),
-    _ = require('lodash');
+    async = require('async');
 
-module.exports = function(options,config) {
-
-  console.info("passage export");
+module.exports = function (options, config) {
 
   options = options || {};
   config = config.get() || {};
 
-  var maxProcess  =  1 ,
+  var maxProcess = config.concurrency || 1,
       delay =  200;
 
   return function (input, submit) {
@@ -38,10 +32,9 @@ module.exports = function(options,config) {
     for (var i = 0; i < wordsObj.length ; i++) {
       words[i] = wordsObj[i];
     }
-    // console.info("words : " , words.length);
 
     //For each span in file ~ Seems does not work
-    async.eachSeries(words , function(word,next){
+    async.eachSeries(words, function (word, next) {
 
       // Build clone of input file
       var obj = clone(input,false);
@@ -62,34 +55,32 @@ module.exports = function(options,config) {
           nextAllW,
           prevW,
           nextW,
-          wBefore="",
-          wAfter="",
+          wBefore = "",
+          wAfter = "",
           askedWord = "<span class='candidatsTermes'>";
 
-      target = $(word).attr("target").replace(/#/g , "").split(" ");
+      target = ($(word).attr("target") || '').replace(/#/g , "").split(" ");
       firstWord = $('w[xml\\:id="' + target[0] + '"]');
 
-      // console.info("passage n° " + words.indexOf(word) + " pour " + input.basename );
 
       // If word not in body balise continue with other span
-      if($(firstWord).length < 1){
-        // console.info(kuler("On ne traite pas " + words.indexOf(word) , "red") + "/" + words.length + " pour " + input.basename);
-        next();
-        return;
+      if ($(firstWord).length < 1) {
+        return next();
       }
 
-      // console.info(kuler("On traite " + words.indexOf(word) , "green") + "/" + words.length + " pour " + input.basename);
-
-
       endWord = (target.length > 1) ? $('w[xml\\:id="' + target[target.length - 1] + '"]') : firstWord;
-      corresp = $(word).attr("corresp").replace(/#entry-/g , "").toString();
-      lemma   = $(word).attr("lemma").toString();
-      para = (($('w[xml\\:id="' + target[0] + '"]').parent().children().length < 12) && ($('w[xml\\:id="' + target[0] + '"]').closest("p").children().length > 12)) ?  $('w[xml\\:id="' + target[0] + '"]').closest("p") :  $('w[xml\\:id="' + target[0] + '"]').parent();
-      
-      $('hi').each(function(i,el){
-        if($(this).attr('rend')){
+      corresp = ($(word).attr("corresp") || '').replace(/#entry-/g, "").toString();
+      lemma   = ($(word).attr("lemma") || '').toString();
+
+      var nbSiblings = firstWord.siblings().length;
+      var nbParaChildren = firstWord.closest("p").children().length;
+
+      para = (nbSiblings < 11 && nbParaChildren > 12) ? firstWord.closest("p") : firstWord.parent();
+
+      $('hi').each(function (i,el) {
+        if ($(this).attr('rend')) {
           var attribut = $(this).attr('rend');
-          $(this).children().each(function(){
+          $(this).children().each(function () {
             $(this).attr('rend' , attribut);
           });
         }
@@ -100,10 +91,9 @@ module.exports = function(options,config) {
       nextAllW = $(endWord).nextAll();
 
       //Create asked words and add attribut nb
-      for(var i = 0 ; i < target.length ; i++){
+      for (var i = 0 ; i < target.length ; i++) {
         askedWord = askedWord + $('w[xml\\:id="' + target[i] + '"]').attr("nb" , "0");
         $('w[xml\\:id="' + target[i] + '"]').attr("nb" , "0");
-        // console.info("nom : ",  input.basename , "corresp : "  , corresp , "i : " ,  i  , "  target  :  " , target[i] , " askedWord : " , askedWord);
       }
       askedWord = askedWord + "</span>";
 
@@ -121,53 +111,45 @@ module.exports = function(options,config) {
       wBefore = '</span>';
 
       var i , j = 0;
-      do{
+      while (i < 6) {
         // Si element exist
-        if(prevAllW[j]){
-          
-          prevW = $(prevAllW[j]);
-          //If its a word
+        if (!prevAllW[j]) { break; }
 
-          if(prevW.is('w')){
-            prevW = prevW.attr("nb" , j+1);
-            wBefore = prevW + wBefore;
-            i++;
-          }
-          else if(!(prevW.is('note'))){
-            wBefore = prevW + wBefore ;
-          }
-          j++;
+        prevW = $(prevAllW[j]);
+        //If its a word
+
+        if (prevW.is('w')) {
+          prevW = prevW.attr("nb", j + 1);
+          wBefore = prevW + wBefore;
+          i++;
         }
-        else{
-          break;
+        else if (!(prevW.is('note'))) {
+          wBefore = prevW + wBefore ;
         }
-      }while(i < 6)
+        j++;
+      }
 
       sentence = '<span class="wBefore">' + wBefore + sentence ;
 
       wAfter = '<span class="wAfter">'
       i = 0;
       j = 0;
-      do{
+      while (i < 6) {
         // Si element exist
-        if(nextAllW[j]){
-          
-          nextW = $(nextAllW[j]);
-          //If its a word
-          if(nextW.is('w')){
-            nextW = nextW.attr("nb" , j+1);
-            wAfter = wAfter + nextW;
-            i++;
-          }
-          else if(!(nextW.is('note'))){
-            wAfter = wAfter + nextW;
-          }
-          j++;
+        if(!nextAllW[j]) { break; }
+
+        nextW = $(nextAllW[j]);
+        //If its a word
+        if (nextW.is('w')) {
+          nextW = nextW.attr("nb", j + 1);
+          wAfter = wAfter + nextW;
+          i++;
         }
-        else{
-          break;
+        else if (!(nextW.is('note'))) {
+          wAfter = wAfter + nextW;
         }
-      }while(i < 6)
+        j++;
+      }
 
       sentence =  sentence + wAfter + '</span>';
 
@@ -189,37 +171,32 @@ module.exports = function(options,config) {
       // Remove BIG & USELESS XML content
       delete obj.content.xml;
 
-      var qe,
-          timeoutID;
+      var qe, timeoutID;
 
       var pause = function (resume) {
-        // console.info(kuler("Fonction pause " + qe.length() + " / " + obj.basename , "orange"));
         clearTimeout(timeoutID);
         timeoutID = setTimeout(function() {
-            if (qe.length() < maxProcess) {
-              // console.info(kuler("On peut continuer : " + qe.length() + " / " + obj.basename , "green"));
-              resume();
-            } else {
-              // console.info(kuler("On doit pausé : " + qe.length() + " / " + obj.basename , "red"));
-              pause(resume);
-            }
+          if (qe.length() < maxProcess) {
+            resume();
+          } else {
+            pause(resume);
+          }
         }, delay);
       };
 
       qe = submit(obj);
-      console.info("qe : " , qe.length());
+
       if (qe.length() >= maxProcess) {
-        // console.info(kuler("On lance fonction pause pour " + obj.basename + " length : " + qe.length() , "blue"));
         pause(next);
+      } else {
+        next();
       }
     },
-    function(err){
-      // Last callback send all submited elements
-      if(!err){
-        console.info(kuler("Subdocuments sent !" + " pour " + input.basename, "green"));
-        submit();
-      }
-      console.info(kuler(err , "red"));
+    function (err) {
+      if (err) { console.info(kuler(err , "red")); }
+
+      // the last callback means that all documents have been submitted
+      submit();
     });
   }
 };

@@ -1,9 +1,7 @@
-var mongo = require("mongodb").MongoClient,
-    kuler = require("kuler"),
-    _ = require("lodash");
+var mongo = require("mongodb").MongoClient;
 
 module.exports = function(config) {
-    
+
     console.info("collection : " , config.get('connectionURI') , " / " , config.get('collectionName'));
 
 	return function(req,res){
@@ -45,8 +43,8 @@ module.exports = function(config) {
                         item.content.nid = item.number;
                         obj[item.basename].push(item.content);
                         // console.info("Fichier -> ", item.basename );
-                        // console.info("target : " , item.content.target); 
-                        console.info("obj : " , Object.keys(obj).length);                 
+                        // console.info("target : " , item.content.target);
+                        console.info("obj : " , Object.keys(obj).length);
                     }
                     else{
                         db.close();
@@ -65,7 +63,7 @@ module.exports = function(config) {
                     }
                 });
             });
-            
+
         });
 
 	};
