@@ -15,7 +15,7 @@ module.exports = function (options, config) {
   options = options || {};
   config = config.get() || {};
 
-  var maxProcess = 1,
+  var maxProcess = config.concurrency || 1,
       delay =  200;
 
   return function (input, submit) {
