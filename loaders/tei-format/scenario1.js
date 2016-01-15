@@ -5,16 +5,12 @@
  'use strict';
 
 // Required modules
-var objectPath = require('object-path'),
-    sha1 = require('sha1'),
-    cheerio = require('cheerio'),
+var cheerio = require('cheerio'),
     clone = require('clone'),
     kuler = require('kuler'),
-    async = require('async'),
-    clone = require('clone'),
-    _ = require('lodash');
+    async = require('async');
 
-module.exports = function(options,config) {
+module.exports = function (options, config) {
 
   options = options || {};
   config = config.get() || {};

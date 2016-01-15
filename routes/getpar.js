@@ -1,10 +1,7 @@
-var mongo = require("mongodb").MongoClient,
-    DOMParser = require('xmldom').DOMParser,
-    cheerio = require('cheerio'),
-    _ = require("lodash");
+var mongo = require("mongodb").MongoClient;
 
 module.exports = function(config) {
-    
+
     console.info("collection : " , config.get('connectionURI') , " / " , config.get('collectionName'));
 
   return function(req,res){
@@ -36,7 +33,7 @@ module.exports = function(config) {
                         return;
                     }
 
-                    p = item.content.para.toString();                    
+                    p = item.content.para.toString();
                 }
                 else{
                     db.close();
