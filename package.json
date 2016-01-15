@@ -20,6 +20,7 @@
     "start": "node ./server.js"
   },
   "dependencies": {
+    "async": "^1.5.2",
     "castor-core": "^2.2.0",
     "castor-load-raw": "^1.0.0",
     "cheerio": "^0.19.0",
