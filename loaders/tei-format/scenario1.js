@@ -85,7 +85,7 @@ module.exports = function(options,config) {
       corresp = $(word).attr("corresp").replace(/#entry-/g , "").toString();
       lemma   = $(word).attr("lemma").toString();
       para = (($('w[xml\\:id="' + target[0] + '"]').parent().children().length < 12) && ($('w[xml\\:id="' + target[0] + '"]').closest("p").children().length > 12)) ?  $('w[xml\\:id="' + target[0] + '"]').closest("p") :  $('w[xml\\:id="' + target[0] + '"]').parent();
-      
+
       $('hi').each(function(i,el){
         if($(this).attr('rend')){
           var attribut = $(this).attr('rend');
@@ -124,7 +124,7 @@ module.exports = function(options,config) {
       do{
         // Si element exist
         if(prevAllW[j]){
-          
+
           prevW = $(prevAllW[j]);
           //If its a word
 
@@ -151,7 +151,7 @@ module.exports = function(options,config) {
       do{
         // Si element exist
         if(nextAllW[j]){
-          
+
           nextW = $(nextAllW[j]);
           //If its a word
           if(nextW.is('w')){
@@ -207,19 +207,19 @@ module.exports = function(options,config) {
       };
 
       qe = submit(obj);
-      console.info("qe : " , qe.length());
+
       if (qe.length() >= maxProcess) {
-        // console.info(kuler("On lance fonction pause pour " + obj.basename + " length : " + qe.length() , "blue"));
         pause(next);
+      } else {
+        next();
       }
     },
-    function(err){
-      // Last callback send all submited elements
-      if(!err){
-        console.info(kuler("Subdocuments sent !" + " pour " + input.basename, "green"));
-        submit();
-      }
-      console.info(kuler(err , "red"));
+    function (err) {
+      if (err) { console.info(kuler(err , "red")); }
+
+      // the last callback means that all documents have been submitted
+      submit();
+      // console.info(kuler("Subdocuments sent !" + " pour " + input.basename, "green"));
     });
   }
 };
