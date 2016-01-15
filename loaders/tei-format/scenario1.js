@@ -66,7 +66,7 @@ module.exports = function(options,config) {
           wAfter="",
           askedWord = "<span class='candidatsTermes'>";
 
-      target = $(word).attr("target").replace(/#/g , "").split(" ");
+      target = ($(word).attr("target") || '').replace(/#/g , "").split(" ");
       firstWord = $('w[xml\\:id="' + target[0] + '"]');
 
       // console.info("passage n° " + words.indexOf(word) + " pour " + input.basename );
@@ -82,8 +82,8 @@ module.exports = function(options,config) {
 
 
       endWord = (target.length > 1) ? $('w[xml\\:id="' + target[target.length - 1] + '"]') : firstWord;
-      corresp = $(word).attr("corresp").replace(/#entry-/g , "").toString();
-      lemma   = $(word).attr("lemma").toString();
+      corresp = ($(word).attr("corresp") || '').replace(/#entry-/g , "").toString();
+      lemma   = ($(word).attr("lemma") || '').toString();
       para = (($('w[xml\\:id="' + target[0] + '"]').parent().children().length < 12) && ($('w[xml\\:id="' + target[0] + '"]').closest("p").children().length > 12)) ?  $('w[xml\\:id="' + target[0] + '"]').closest("p") :  $('w[xml\\:id="' + target[0] + '"]').parent();
 
       $('hi').each(function(i,el){
