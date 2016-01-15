@@ -21,7 +21,7 @@ module.exports = function(options,config) {
   options = options || {};
   config = config.get() || {};
 
-  var maxProcess  =  1 ,
+  var maxProcess = 1,
       delay =  200;
 
   return function (input, submit) {
@@ -38,10 +38,10 @@ module.exports = function(options,config) {
     for (var i = 0; i < wordsObj.length ; i++) {
       words[i] = wordsObj[i];
     }
-    // console.info("words : " , words.length);
+    // console.info("words : ", words.length);
 
     //For each span in file ~ Seems does not work
-    async.eachSeries(words , function(word,next){
+    async.eachSeries(words, function (word, next) {
 
       // Build clone of input file
       var obj = clone(input,false);
@@ -62,8 +62,8 @@ module.exports = function(options,config) {
           nextAllW,
           prevW,
           nextW,
-          wBefore="",
-          wAfter="",
+          wBefore = "",
+          wAfter = "",
           askedWord = "<span class='candidatsTermes'>";
 
       target = ($(word).attr("target") || '').replace(/#/g , "").split(" ");
@@ -72,17 +72,16 @@ module.exports = function(options,config) {
       // console.info("passage n° " + words.indexOf(word) + " pour " + input.basename );
 
       // If word not in body balise continue with other span
-      if($(firstWord).length < 1){
+      if ($(firstWord).length < 1) {
         // console.info(kuler("On ne traite pas " + words.indexOf(word) , "red") + "/" + words.length + " pour " + input.basename);
-        next();
-        return;
+        return next();
       }
 
       // console.info(kuler("On traite " + words.indexOf(word) , "green") + "/" + words.length + " pour " + input.basename);
 
 
       endWord = (target.length > 1) ? $('w[xml\\:id="' + target[target.length - 1] + '"]') : firstWord;
-      corresp = ($(word).attr("corresp") || '').replace(/#entry-/g , "").toString();
+      corresp = ($(word).attr("corresp") || '').replace(/#entry-/g, "").toString();
       lemma   = ($(word).attr("lemma") || '').toString();
 
       var nbSiblings = firstWord.siblings().length;
@@ -90,10 +89,10 @@ module.exports = function(options,config) {
 
       para = (nbSiblings < 11 && nbParaChildren > 12) ? firstWord.closest("p") : firstWord.parent();
 
-      $('hi').each(function(i,el){
-        if($(this).attr('rend')){
+      $('hi').each(function (i,el) {
+        if ($(this).attr('rend')) {
           var attribut = $(this).attr('rend');
-          $(this).children().each(function(){
+          $(this).children().each(function () {
             $(this).attr('rend' , attribut);
           });
         }
@@ -104,7 +103,7 @@ module.exports = function(options,config) {
       nextAllW = $(endWord).nextAll();
 
       //Create asked words and add attribut nb
-      for(var i = 0 ; i < target.length ; i++){
+      for (var i = 0 ; i < target.length ; i++) {
         askedWord = askedWord + $('w[xml\\:id="' + target[i] + '"]').attr("nb" , "0");
         $('w[xml\\:id="' + target[i] + '"]').attr("nb" , "0");
         // console.info("nom : ",  input.basename , "corresp : "  , corresp , "i : " ,  i  , "  target  :  " , target[i] , " askedWord : " , askedWord);
@@ -125,53 +124,45 @@ module.exports = function(options,config) {
       wBefore = '</span>';
 
       var i , j = 0;
-      do{
+      while (i < 6) {
         // Si element exist
-        if(prevAllW[j]){
+        if (!prevAllW[j]) { break; }
 
-          prevW = $(prevAllW[j]);
-          //If its a word
+        prevW = $(prevAllW[j]);
+        //If its a word
 
-          if(prevW.is('w')){
-            prevW = prevW.attr("nb" , j+1);
-            wBefore = prevW + wBefore;
-            i++;
-          }
-          else if(!(prevW.is('note'))){
-            wBefore = prevW + wBefore ;
-          }
-          j++;
+        if (prevW.is('w')) {
+          prevW = prevW.attr("nb", j + 1);
+          wBefore = prevW + wBefore;
+          i++;
         }
-        else{
-          break;
+        else if (!(prevW.is('note'))) {
+          wBefore = prevW + wBefore ;
         }
-      }while(i < 6)
+        j++;
+      }
 
       sentence = '<span class="wBefore">' + wBefore + sentence ;
 
       wAfter = '<span class="wAfter">'
       i = 0;
       j = 0;
-      do{
+      while (i < 6) {
         // Si element exist
-        if(nextAllW[j]){
+        if(!nextAllW[j]) { break; }
 
-          nextW = $(nextAllW[j]);
-          //If its a word
-          if(nextW.is('w')){
-            nextW = nextW.attr("nb" , j+1);
-            wAfter = wAfter + nextW;
-            i++;
-          }
-          else if(!(nextW.is('note'))){
-            wAfter = wAfter + nextW;
-          }
-          j++;
+        nextW = $(nextAllW[j]);
+        //If its a word
+        if (nextW.is('w')) {
+          nextW = nextW.attr("nb", j + 1);
+          wAfter = wAfter + nextW;
+          i++;
         }
-        else{
-          break;
+        else if (!(nextW.is('note'))) {
+          wAfter = wAfter + nextW;
         }
-      }while(i < 6)
+        j++;
+      }
 
       sentence =  sentence + wAfter + '</span>';
 
@@ -193,20 +184,19 @@ module.exports = function(options,config) {
       // Remove BIG & USELESS XML content
       delete obj.content.xml;
 
-      var qe,
-          timeoutID;
+      var qe, timeoutID;
 
       var pause = function (resume) {
         // console.info(kuler("Fonction pause " + qe.length() + " / " + obj.basename , "orange"));
         clearTimeout(timeoutID);
         timeoutID = setTimeout(function() {
-            if (qe.length() < maxProcess) {
-              // console.info(kuler("On peut continuer : " + qe.length() + " / " + obj.basename , "green"));
-              resume();
-            } else {
-              // console.info(kuler("On doit pausé : " + qe.length() + " / " + obj.basename , "red"));
-              pause(resume);
-            }
+          if (qe.length() < maxProcess) {
+            // console.info(kuler("On peut continuer : " + qe.length() + " / " + obj.basename , "green"));
+            resume();
+          } else {
+            // console.info(kuler("On doit pausé : " + qe.length() + " / " + obj.basename , "red"));
+            pause(resume);
+          }
         }, delay);
       };
 
