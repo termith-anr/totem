@@ -28,7 +28,7 @@ module.exports = function(config) {
             count;
 
         mongo.connect(config.get('connectionURI'), function(err, db) {
-            //console.log("Connected correctly to server");
+            console.info("\n Connected correctly to server \n");
             db.collection(config.get('collectionName')).count({"content.corresp" : req.params.xmlid }, function(err, totalDoc){
                 db.collection(config.get('collectionName'))
                 .find({"content.corresp" : req.params.xmlid } , {content : 1 , basename : 1 , wid : 1 , number : 1})

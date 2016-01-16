@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI 
+  xmlns="http://www.tei-c.org/ns/1.0" 
+  xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+  xmlns:atilf="http//www.atilf.fr" schemaLocation="http://www.tei-c.org/ns/1.0 http://www.lodel.org/ns/tei.openedition.1.0.xsd">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title level="a" type="main">
+          <w xml:id="d1e6" wsAfter="true">Manifestations</w>
+          <w xml:id="d1e9" wsAfter="true">gabaritiques</w>
+          <w xml:id="d1e12" wsAfter="true">dans</w>
+          <w xml:id="d1e15" wsAfter="true">la</w>
+          <w xml:id="d1e21" wsAfter="true">morphologie</w>
+          <w xml:id="d1e25" wsAfter="true">verbale</w>
+          <w xml:id="d1e28" wsAfter="true">du</w>
+          <w xml:id="d1e32" wsAfter="true">berb&#xE8;re</w>
+          <pc xml:id="d1e35" wsAfter="false">(</pc>
+          <w xml:id="d1e38" wsAfter="true">parler</w>
+          <w xml:id="d1e41" wsAfter="true">chleuh</w>
+          <w xml:id="d1e44" wsAfter="false">d&apos;</w>
+          <w xml:id="d1e46" wsAfter="false">Agadir)</w>
+        </title>
+        <author>
+          <persName>
+            <w xml:id="d1e50" wsAfter="false">
+              <forename>Mohamed</forename>
+              <surname>Lahrouchi</surname>
+            </w>
+          </persName>
+        </author>
+      </titleStmt>
+      <publicationStmt>
+        <w xml:id="d1e56" wsAfter="true">
+          <date when="2005-06-06">2005-06-06</date>
+          <availability next="#Repair_new3">
+            <p next="#Repair_new2">&#xA9;</p>
+          </availability>
+        </w>
+        <availability xml:id="Repair_new3">
+          <p xml:id="Repair_new2">
+            <w xml:id="d1e65" wsAfter="true">Presses</w>
+            <w xml:id="d1e69" wsAfter="true">universitaires</w>
+            <w xml:id="d1e72" wsAfter="true">de</w>
+            <w xml:id="d1e75" wsAfter="false">Vincennes</w>
+          </p>
+        </availability>
+        <idno type="url">
+          <w xml:id="d1e78" wsAfter="false">http://rlv.revues.org/455</w>
+        </idno>
+      </publicationStmt>
+      <sourceDesc>
+        <biblFull>
+          <titleStmt>
+            <title/>
+            <respStmt>
+              <w xml:id="d1e85" wsAfter="true">
+                <resp>auteur</resp>
+                <name next="#Repair_new6">Mohamed</name>
+              </w>
+              <name xml:id="Repair_new6">
+                <w xml:id="d1e92" wsAfter="false">Lahrouchi</w>
+              </name>
+            </respStmt>
+          </titleStmt>
+          <publicationStmt>
+            <w xml:id="d1e95" wsAfter="false">
+              <date/>
+              <idno type="pp">61-82</idno>
+            </w>
+          </publicationStmt>
+        </biblFull>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <appInfo>
+        <application ident="Lodel" version="1.0">
+          <w xml:id="d1e102" wsAfter="true">
+            <label>Lodel</label>
+            <desc next="#Repair_new10">
+              <ref next="#Repair_new9" target="http://www.tei-c.org/">We</ref>
+            </desc>
+          </w>
+          <desc xml:id="Repair_new10">
+            <ref xml:id="Repair_new9">
+              <w xml:id="d1e111" wsAfter="true">use</w>
+              <w xml:id="d1e114" wsAfter="false">TEI</w>
+            </ref>
+          </desc>
+        </application>
+      </appInfo>
+      <tagsDecl>
+        <w xml:id="d1e117" wsAfter="false">
+          <rendition id="T1" scheme="css">text-decoration:line-through</rendition>
+          <rendition id="T2" scheme="css">font-variant:small-caps;text-decoration:underline</rendition>
+          <rendition id="T3" scheme="css">font-variant:small-caps</rendition>
+          <rendition id="T4" scheme="css">text-transform:uppercase</rendition>
+          <rendition id="T5" scheme="css">text-transform:uppercase;text-decoration:underline;</rendition>
+        </w>
+      </tagsDecl>
+    </encodingDesc>
+    <profileDesc>
+      <w xml:id="d1e129" wsAfter="false">
+        <langUsage>
+          <language ident="fr">fr</language>
+        </langUsage>
+        <textClass>
+          <keywords lang="fr" scheme="keyword">
+            <list>
+              <item>morphologie</item>
+              <item>gabarits</item>
+              <item>causatif</item>
+              <item>r&#xE9;ciproque</item>
+              <item>berb&#xE8;re</item>
+              <item>tachelhit</item>
+              <item>phonologie</item>
+              <item>d&#xE9;rivation</item>
+            </list>
+          </keywords>
+          <keywords lang="en" scheme="keyword">
+            <list>
+              <item>morphology</item>
+              <item>phonology</item>
+              <item>templates</item>
+              <item>derivation</item>
+              <item>causative</item>
+              <item>reciprocal</item>
+              <item>Berber</item>
+              <item>Tashelhiyt</item>
+            </list>
+          </keywords>
+        </textClass>
+      </w>
+    </profileDesc>
+  </teiHeader>
+  <text>
+    <front>
+      <div lang="fr" type="abstract">
+        <p>
+          <w xml:id="d1e174" wsAfter="true">En</w>
+          <w xml:id="d1e178" wsAfter="true">berb&#xE8;re</w>
+          <w xml:id="d1e181" wsAfter="false">tachelhit</w>
+          <pc xml:id="d1e183" wsAfter="true">,</pc>
+          <w xml:id="d1e186" wsAfter="true">les</w>
+          <w xml:id="d1e192" wsAfter="true">verbes</w>
+          <w xml:id="d1e196" wsAfter="true">causatifs</w>
+          <w xml:id="d1e199" wsAfter="true">et</w>
+          <w xml:id="d1e203" wsAfter="true">r&#xE9;ciproques</w>
+          <w xml:id="d1e207" wsAfter="true">sont</w>
+          <w xml:id="d1e210" wsAfter="true">construits</w>
+          <w xml:id="d1e213" wsAfter="true">par</w>
+          <w xml:id="d1e216" wsAfter="true">la</w>
+          <w xml:id="d1e220" wsAfter="true">pr&#xE9;fixation</w>
+          <w xml:id="d1e223" wsAfter="false">d&apos;</w>
+          <w xml:id="d1e226" wsAfter="true">un</w>
+          <w xml:id="d1e230" wsAfter="true">affixe</w>
+          <w xml:id="d1e233" wsAfter="true">monoconsonantique</w>
+          <w xml:id="d1e236" wsAfter="true">&#xE0;</w>
+          <w xml:id="d1e239" wsAfter="true">une</w>
+          <w xml:id="d1e242" wsAfter="false">base</w>
+          <w xml:id="d1e245" wsAfter="true">.</w>
+          <w xml:id="d1e248" wsAfter="true">En</w>
+          <w xml:id="d1e251" wsAfter="true">fonction</w>
+          <w xml:id="d1e254" wsAfter="true">des</w>
+          <w xml:id="d1e258" wsAfter="true">propri&#xE9;t&#xE9;s</w>
+          <w xml:id="d1e261" wsAfter="true">de</w>
+          <w xml:id="d1e265" wsAfter="true">la</w>
+          <w xml:id="d1e268" wsAfter="false">base</w>
+          <pc xml:id="d1e270" wsAfter="true">,</pc>
+          <w xml:id="d1e273" wsAfter="true">ces</w>
+          <w xml:id="d1e277" wsAfter="true">pr&#xE9;fixes</w>
+          <w xml:id="d1e280" wsAfter="true">seront</w>
+          <w xml:id="d1e284" wsAfter="true">r&#xE9;alis&#xE9;s</w>
+          <w xml:id="d1e287" wsAfter="true">comme</w>
+          <w xml:id="d1e290" wsAfter="true">des</w>
+          <w xml:id="d1e294" wsAfter="true">consonnes</w>
+          <w xml:id="d1e298" wsAfter="true">simples</w>
+          <w xml:id="d1e301" wsAfter="true">ou</w>
+          <w xml:id="d1e306" wsAfter="false">g&#xE9;min&#xE9;es</w>
+          <w xml:id="d1e308" wsAfter="true">.</w>
+          <w xml:id="d1e311" wsAfter="true">Il</w>
+          <w xml:id="d1e314" wsAfter="true">est</w>
+          <w xml:id="d1e317" wsAfter="true">soutenu</w>
+          <w xml:id="d1e320" wsAfter="true">dans</w>
+          <w xml:id="d1e324" wsAfter="true">cet</w>
+          <w xml:id="d1e327" wsAfter="true">article</w>
+          <w xml:id="d1e330" wsAfter="false">qu&apos;</w>
+          <w xml:id="d1e332" wsAfter="true">un</w>
+          <w xml:id="d1e335" wsAfter="true">site</w>
+          <w xml:id="d1e338" wsAfter="true">gabaritique</w>
+          <w xml:id="d1e343" wsAfter="true">initial</w>
+          <w xml:id="d1e346" wsAfter="true">est</w>
+          <w xml:id="d1e350" wsAfter="true">responsable</w>
+          <w xml:id="d1e353" wsAfter="true">des</w>
+          <w xml:id="d1e357" wsAfter="true">variations</w>
+          <w xml:id="d1e360" wsAfter="true">de</w>
+          <w xml:id="d1e364" wsAfter="true">taille</w>
+          <w xml:id="d1e367" wsAfter="true">des</w>
+          <w xml:id="d1e371" wsAfter="false">pr&#xE9;fixes</w>
+          <w xml:id="d1e373" wsAfter="true">.</w>
+          <w xml:id="d1e376" wsAfter="true">De</w>
+          <w xml:id="d1e379" wsAfter="false">plus</w>
+          <pc xml:id="d1e381" wsAfter="true">,</pc>
+          <w xml:id="d1e385" wsAfter="true">des</w>
+          <w xml:id="d1e389" wsAfter="true">combinaisons</w>
+          <w xml:id="d1e393" wsAfter="true">complexes</w>
+          <w xml:id="d1e396" wsAfter="true">de</w>
+          <w xml:id="d1e400" wsAfter="true">pr&#xE9;fixes</w>
+          <pc xml:id="d1e403" wsAfter="false">(</pc>
+          <w xml:id="d1e407" wsAfter="true">causatif</w>
+          <w xml:id="d1e410" wsAfter="true">+</w>
+          <w xml:id="d1e414" wsAfter="false">r&#xE9;ciproque</w>
+          <pc xml:id="d1e416" wsAfter="true">,</pc>
+          <w xml:id="d1e420" wsAfter="true">r&#xE9;ciproque</w>
+          <w xml:id="d1e423" wsAfter="true">+</w>
+          <w xml:id="d1e428" wsAfter="false">causatif</w>
+          <pc xml:id="d1e430" wsAfter="true">)</pc>
+          <w xml:id="d1e433" wsAfter="true">nourrissent</w>
+          <w xml:id="d1e436" wsAfter="true">des</w>
+          <w xml:id="d1e440" wsAfter="true">ph&#xE9;nom&#xE8;nes</w>
+          <w xml:id="d1e444" wsAfter="true">phonologiques</w>
+          <w xml:id="d1e449" wsAfter="true">apparement</w>
+          <w xml:id="d1e453" wsAfter="false">paradoxaux</w>
+          <w xml:id="d1e455" wsAfter="true">.</w>
+          <w xml:id="d1e458" wsAfter="true">Il</w>
+          <w xml:id="d1e461" wsAfter="true">est</w>
+          <w xml:id="d1e464" wsAfter="true">montr&#xE9;</w>
+          <w xml:id="d1e468" wsAfter="false">qu&apos;</w>
+          <w xml:id="d1e470" wsAfter="true">ils</w>
+          <w xml:id="d1e473" wsAfter="true">d&#xE9;coulent</w>
+          <w xml:id="d1e476" wsAfter="true">directement</w>
+          <w xml:id="d1e479" wsAfter="true">de</w>
+          <w xml:id="d1e482" wsAfter="true">la</w>
+          <w xml:id="d1e486" wsAfter="true">pr&#xE9;sence</w>
+          <w xml:id="d1e489" wsAfter="true">du</w>
+          <w xml:id="d1e492" wsAfter="true">site</w>
+          <w xml:id="d1e495" wsAfter="false">initial.</w>
+        </p>
+      </div>
+      <div lang="en" type="abstract">
+        <p>
+          <w xml:id="d1e499" wsAfter="true">In</w>
+          <w xml:id="d1e502" wsAfter="true">Tashelhiyt</w>
+          <w xml:id="d1e505" wsAfter="false">Berber</w>
+          <pc xml:id="d1e507" wsAfter="true">,</pc>
+          <w xml:id="d1e511" wsAfter="true">causative</w>
+          <w xml:id="d1e515" wsAfter="true">and</w>
+          <w xml:id="d1e519" wsAfter="true">reciprocal</w>
+          <w xml:id="d1e523" wsAfter="true">verbs</w>
+          <w xml:id="d1e527" wsAfter="true">are</w>
+          <w xml:id="d1e530" wsAfter="true">built</w>
+          <w xml:id="d1e533" wsAfter="true">by</w>
+          <w xml:id="d1e537" wsAfter="true">means</w>
+          <w xml:id="d1e541" wsAfter="true">of</w>
+          <w xml:id="d1e544" wsAfter="true">monoconsonantal</w>
+          <w xml:id="d1e547" wsAfter="true">prefixes</w>
+          <w xml:id="d1e550" wsAfter="true">attached</w>
+          <w xml:id="d1e553" wsAfter="true">to</w>
+          <w xml:id="d1e556" wsAfter="true">a</w>
+          <w xml:id="d1e561" wsAfter="false">stem</w>
+          <w xml:id="d1e563" wsAfter="true">.</w>
+          <w xml:id="d1e566" wsAfter="true">Depending</w>
+          <w xml:id="d1e569" wsAfter="true">on</w>
+          <w xml:id="d1e573" wsAfter="true">properties</w>
+          <w xml:id="d1e576" wsAfter="true">of</w>
+          <w xml:id="d1e580" wsAfter="true">the</w>
+          <w xml:id="d1e584" wsAfter="false">stem</w>
+          <pc xml:id="d1e586" wsAfter="true">,</pc>
+          <w xml:id="d1e590" wsAfter="true">those</w>
+          <w xml:id="d1e593" wsAfter="true">prefixes</w>
+          <w xml:id="d1e597" wsAfter="true">will</w>
+          <w xml:id="d1e601" wsAfter="true">be</w>
+          <w xml:id="d1e604" wsAfter="true">realized</w>
+          <w xml:id="d1e607" wsAfter="true">as</w>
+          <w xml:id="d1e610" wsAfter="true">single</w>
+          <w xml:id="d1e613" wsAfter="true">or</w>
+          <w xml:id="d1e616" wsAfter="true">geminate</w>
+          <w xml:id="d1e621" wsAfter="false">segments</w>
+          <w xml:id="d1e623" wsAfter="true">.</w>
+          <w xml:id="d1e626" wsAfter="true">It</w>
+          <w xml:id="d1e629" wsAfter="true">is</w>
+          <w xml:id="d1e633" wsAfter="true">argued</w>
+          <w xml:id="d1e636" wsAfter="true">in</w>
+          <w xml:id="d1e641" wsAfter="true">this</w>
+          <w xml:id="d1e645" wsAfter="true">paper</w>
+          <w xml:id="d1e649" wsAfter="true">that</w>
+          <w xml:id="d1e652" wsAfter="true">an</w>
+          <w xml:id="d1e656" wsAfter="true">initial</w>
+          <w xml:id="d1e659" wsAfter="true">templatic</w>
+          <w xml:id="d1e663" wsAfter="true">site</w>
+          <w xml:id="d1e666" wsAfter="true">is</w>
+          <w xml:id="d1e670" wsAfter="true">responsible</w>
+          <w xml:id="d1e674" wsAfter="true">for</w>
+          <w xml:id="d1e677" wsAfter="true">the</w>
+          <w xml:id="d1e681" wsAfter="true">size</w>
+          <w xml:id="d1e686" wsAfter="true">variations</w>
+          <w xml:id="d1e689" wsAfter="true">of</w>
+          <w xml:id="d1e692" wsAfter="true">the</w>
+          <w xml:id="d1e695" wsAfter="false">prefixes</w>
+          <w xml:id="d1e697" wsAfter="true">.</w>
+          <w xml:id="d1e701" wsAfter="false">Moreover</w>
+          <pc xml:id="d1e703" wsAfter="true">,</pc>
+          <w xml:id="d1e707" wsAfter="true">complex</w>
+          <w xml:id="d1e711" wsAfter="true">combinations</w>
+          <w xml:id="d1e714" wsAfter="true">of</w>
+          <w xml:id="d1e718" wsAfter="true">those</w>
+          <w xml:id="d1e721" wsAfter="true">prefixes</w>
+          <pc xml:id="d1e724" wsAfter="false">(</pc>
+          <w xml:id="d1e728" wsAfter="true">causative</w>
+          <w xml:id="d1e731" wsAfter="true">+</w>
+          <w xml:id="d1e734" wsAfter="false">reciprocal</w>
+          <pc xml:id="d1e736" wsAfter="true">,</pc>
+          <w xml:id="d1e739" wsAfter="true">reciprocal</w>
+          <w xml:id="d1e742" wsAfter="true">+</w>
+          <w xml:id="d1e747" wsAfter="false">causative</w>
+          <pc xml:id="d1e749" wsAfter="true">)</pc>
+          <w xml:id="d1e752" wsAfter="true">feed</w>
+          <w xml:id="d1e755" wsAfter="true">seemingly</w>
+          <w xml:id="d1e758" wsAfter="true">paradoxical</w>
+          <w xml:id="d1e762" wsAfter="true">phonological</w>
+          <w xml:id="d1e766" wsAfter="true">phenomena</w>
+          <w xml:id="d1e769" wsAfter="true">of</w>
+          <w xml:id="d1e773" wsAfter="true">selective</w>
+          <w xml:id="d1e776" wsAfter="false">dissimilation</w>
+          <w xml:id="d1e778" wsAfter="true">.</w>
+          <w xml:id="d1e783" wsAfter="true">They</w>
+          <w xml:id="d1e787" wsAfter="true">are</w>
+          <w xml:id="d1e792" wsAfter="true">shown</w>
+          <w xml:id="d1e795" wsAfter="true">to</w>
+          <w xml:id="d1e798" wsAfter="true">follow</w>
+          <w xml:id="d1e802" wsAfter="true">directly</w>
+          <w xml:id="d1e806" wsAfter="true">from</w>
+          <w xml:id="d1e809" wsAfter="true">the</w>
+          <w xml:id="d1e813" wsAfter="true">presence</w>
+          <w xml:id="d1e816" wsAfter="true">of</w>
+          <w xml:id="d1e819" wsAfter="true">the</w>
+          <w xml:id="d1e823" wsAfter="true">initial</w>
+          <w xml:id="d1e826" wsAfter="false">site</w>.
+        </p>
+      </div>
+    </front>
+    <body/>
+    <back/>
+  </text>
+  <stdf>
+    <spanGrp type="wordForms"></spanGrp>
+    <spanGrp type="candidatsTermes">
+      <interGrp type="desambiguisation_manuelle">
+        <interp xml:id="DM1">Occurrence du candidat terme valid&#xE9;e seulement au niveau syntaxique</interp>
+        <interp xml:id="DM2">Occurrence du candidat terme valid&#xE9;e au niveau scientifique et syntaxique</interp>
+        <interp xml:id="DM3">Occurrence du candidat terme valid&#xE9;e au niveau disciplinaire, scientifique et syntaxique</interp>
+        <interp xml:id="DM4">Occurrence du candidat terme valid&#xE9;e sur tous les niveaux d&apos;annotation. Elle est valid&#xE9;e au niveau terminologique</interp>
+        <interp xml:id="DM0">Occurrence du candidat terme rejet&#xE9;e d&#xE8;s le niveau syntaxique</interp>
+      </interGrp>
+      <interGrp type="desambiguisation_automatique">
+        <interp xml:id="DAOn">Occurrence du candidat terme valid&#xE9;e au niveau terminologique selon le syst&#xE8;me de d&#xE9;sambigu&#xEF;sation utilis&#xE9;</interp>
+        <interp xml:id="DAOff">Occurrence du candidat terme non valide par le syst&#xE8;me de d&#xE9;sambigu&#xEF;sation</interp>
+      </interGrp>
+      <span target="#d1e192 #d1e196" lemma="verbe causatif" ana="#DM1 #DAOn" corresp="#entry-2964130"/>
+      <span target="#d1e220" lemma="pr&#xE9;fixation" ana="#DM1 #DAOn" corresp="#entry-476931"/>
+      <span target="#d1e230" lemma="affixe" ana="#DM1 #DAOn" corresp="#entry-985284"/>
+      <span target="#d1e277" lemma="pr&#xE9;fixe" ana="#DM1 #DAOn" corresp="#entry-820559"/>
+      <span target="#d1e294" lemma="consonne" ana="#DM1 #DAOn" corresp="#entry-959897"/>
+      <span target="#d1e371" lemma="pr&#xE9;fixe" ana="#DM1 #DAOn" corresp="#entry-820559"/>
+      <span target="#d1e400" lemma="pr&#xE9;fixe" ana="#DM1 #DAOn" corresp="#entry-820559"/>
+      <span target="#d1e621" lemma="segment" ana="#DM1 #DAOn" corresp="#entry-735074"/>
+    </spanGrp>
+  </stdf>
+</TEI>
