@@ -15,6 +15,8 @@ module.exports = function (options, config) {
   options = options || {};
   config = config.get() || {};
 
+
+
   var maxProcess = config.concurrency || 1,
       delay =  200;
 
@@ -62,9 +64,12 @@ module.exports = function (options, config) {
       target = ($(word).attr("target") || '').replace(/#/g , "").split(" ");
       firstWord = $('w[xml\\:id="' + target[0] + '"]');
 
+      var isInFiltr = $("body div , text front div , teiHeader fileDesc titleStmt title[lang='fr'], teiHeader fileDesc titleStmt title:not([lang=])").find(firstWord).length
+
+      console.info("\n isInFiltr : " , isInFiltr , " \n");
 
       // If word not in body balise continue with other span
-      if ($(firstWord).length < 1) {
+      if (isInFiltr < 1) {
         return next();
       }
 
