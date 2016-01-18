@@ -2,7 +2,7 @@
 
 
 {% block head %}
-<title>Liste des extraits pour </title>
+<title>{% if lemma %} {{ lemma }} - Totem {% else %} Accueil {% endif %}</title>
 <link rel="stylesheet" type="text/css" href="/assets/created/css/search.css">
 {% endblock %}
         

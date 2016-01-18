@@ -66,7 +66,7 @@ module.exports = function (options, config) {
 
       var isInFiltr = $("body div , text front div , teiHeader fileDesc titleStmt title[lang='fr'], teiHeader fileDesc titleStmt title:not([lang=])").find(firstWord).length
 
-      console.info("\n isInFiltr : " , isInFiltr , " \n");
+      // console.info("\n isInFiltr : " , isInFiltr , " \n");
 
       // If word not in body balise continue with other span
       if (isInFiltr < 1) {
