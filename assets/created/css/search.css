@@ -1,5 +1,9 @@
 /*GENERAL*/
 
+body{
+  min-height: 100vh;
+}
+
 #containerUL{
   min-height: calc(100vh + 75px);
 }
