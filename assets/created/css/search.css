@@ -149,7 +149,7 @@ w, pc{
 }
 
 .nbElements:hover{
-  background: red !important;
+  background: #795548 !important;
 }
 
 .sentence:hover{
@@ -168,10 +168,12 @@ p .wordToSearch{
 
 .collection{
   margin: 10px;
+  border: none;
 }
 
 .collection .collection-item{
   padding : 10px 0;
+  border-bottom: 1px solid brown !important;
 }
 
 .collection .collection-item.avatar{
@@ -192,4 +194,17 @@ p .wordToSearch{
 
 .jscroll-loading{
   text-align: center !important;
+}
+
+
+/* FOOTER */
+
+.linkLogosPatner{
+  filter : grayscale(100%);
+  transition : transform 500ms;
+}
+
+.linkLogosPatner:hover{
+  filter : none;
+  transform : scale(1.09);
 }
