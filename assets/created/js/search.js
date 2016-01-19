@@ -83,31 +83,7 @@ $(document).ready(function() {
         parent,
         html;
 
-    // var getInfos = function(trigger){
-    //   var element = $(trigger);
-    //   var el, doc , bro , target , content = "";
-    //   if(element.hasClass("sub")){
-    //     bro = "div";
-    //   }
-    //   else{
-    //     bro = "li";
-    //   }
-    //   el = element.siblings("div").first();
-    //   doc = el.attr("data-basename");
-    //   target = el.attr("data-target");
-    //   w = $("w" , el);
-    //   w.each(function(){
-    //     content = content + $(this).text();
-    //     if(element.attr("wsafter") === "true"){
-    //       content += " ";
-    //     }
-    //   });
-    //   toCopy = content + "\\" + "[" + doc + "/" + target +"]";
-    //   console.log(toCopy);
-    //   return toCopy.toString();
-    // };
-
-    new Clipboard('.copyInfo', {
+    var clipboard = new Clipboard('.copyInfo', {
       text: function(trigger){
         var element = $(trigger);
         var el, doc , bro , target , content = "";
@@ -132,6 +108,13 @@ $(document).ready(function() {
         console.log(toCopy);
         return toCopy.toString();
       }
+    });
+
+    clipboard.on('success', function(e) {
+      $(".copyInfo").css('color' , '');
+      Materialize.toast('Élément copié', 2300);
+      $(e.trigger).css("color" , "#FFD700");
+      e.clearSelection();
     });
 
 
