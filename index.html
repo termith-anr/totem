@@ -2,7 +2,7 @@
 
 
 {% block head %}
-<title>{% if lemma %} {{ lemma }} - Totem {% else %} Accueil {% endif %}</title>
+<title>{% if termPilot %} {{ termPilot }} - Totem {% elif lemma %} {{lemma}} - Totem {% else %} Accueil {% endif %}</title>
 <link rel="stylesheet" type="text/css" href="/assets/created/css/search.css">
 {% endblock %}
         
@@ -10,7 +10,9 @@
 {% block content %}
 
 <div class="jumbotron">
-  {% if lemma %}
+  {% if termPilot %}
+    <h4 id="resultsTitle">{{ totalDoc }} résultats pour : <span class="word2Search brown-text">{{ termPilot }}</span></h4>
+  {% elif lemma %} 
     <h4 id="resultsTitle">{{ totalDoc }} résultats pour : <span class="word2Search brown-text">{{ lemma }}</span></h4>
   {% elif info %}
     <h4 id="info">{{ info }}</h4>
@@ -19,7 +21,7 @@
 
 
 {% if not objs %}
-<div class="container">
+<div class="container" style="min-height : 75vh">
   <div class="row">
     <div class="input-field col s12">
       <input id="id" type="text" class="validate" placeholder="220576">

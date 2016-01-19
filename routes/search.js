@@ -2,8 +2,6 @@ var mongo = require("mongodb").MongoClient;
 
 module.exports = function(config) {
 
-    console.info("collection : " , config.get('connectionURI') , " / " , config.get('collectionName'));
-
 	return function(req,res){
 
         if(!req.params.xmlid || (req.params.xmlid === undefined)){
@@ -17,10 +15,11 @@ module.exports = function(config) {
         }
 
 		var page = req.params.page ?  parseInt(req.params.page)  : 1,
+            xmlid = (req.params.xmlid).split("&")[0],
+            termPilot = ((req.params.xmlid).split("&").length === 2) ? decodeURIComponent((req.params.xmlid).split("&")[1]) : null,
             skip = (Number.isInteger(page) && page > 1) ? (page - 1)*50 +1 : 0 ;
 
-        console.info("skip : " , skip);
-
+        console.info("termpilot : " , termPilot);
 
         var obj = {}, // Contian all items
             title,
@@ -28,10 +27,9 @@ module.exports = function(config) {
             count;
 
         mongo.connect(config.get('connectionURI'), function(err, db) {
-            console.info("\n Connected correctly to server \n");
-            db.collection(config.get('collectionName')).count({"content.corresp" : req.params.xmlid }, function(err, totalDoc){
+            db.collection(config.get('collectionName')).count({"content.corresp" : xmlid }, function(err, totalDoc){
                 db.collection(config.get('collectionName'))
-                .find({"content.corresp" : req.params.xmlid } , {content : 1 , basename : 1 , wid : 1 , number : 1})
+                .find({"content.corresp" : xmlid} , {content : 1 , basename : 1 , wid : 1 , number : 1})
                 .skip(skip)
                 .limit(50)
                 .each(function(err, item){
@@ -42,9 +40,6 @@ module.exports = function(config) {
                         item.content.widdoc = item.wid;
                         item.content.nid = item.number;
                         obj[item.basename].push(item.content);
-                        // console.info("Fichier -> ", item.basename );
-                        // console.info("target : " , item.content.target);
-                        console.info("obj : " , Object.keys(obj).length);
                     }
                     else{
                         db.close();
@@ -55,7 +50,7 @@ module.exports = function(config) {
                             }
                             var words = [],
                                 lemma = obj[Object.keys(obj)[0]][0].lemma;
-                            res.render('index.html', { page : page , id : req.params.xmlid, lemma : lemma , totalDoc : totalDoc, objs : obj });
+                            res.render('index.html', { page : page , id : xmlid, lemma : lemma , termPilot : termPilot, totalDoc : totalDoc, objs : obj });
                         }
                         else{
                             console.info("err : " , err);
