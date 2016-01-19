@@ -122,11 +122,11 @@ w, pc{
 }
 
 [nb="0"]{
-  color : red;
+  color : brown;
 }
 
 [nb="1"]{
-  color : blue;
+  color : #009688;
 }
 
 [rend="italic"]{
@@ -212,7 +212,7 @@ p .wordToSearch{
 
 .collection .collection-item{
   padding : 10px 0;
-  border-bottom: 1px solid brown !important;
+  border-bottom: 1px solid #009688 !important;
 }
 
 .collection .collection-item.avatar{
