@@ -38,12 +38,15 @@
   {% for title, items in objs %}
   <ul class="collection toGet">
     <li class="collection-item avatar">
-      {% if items|length > 1 %}<i class="circle grey white-text nbElements">{{ items|length }}</i>{% endif %}
+      {% if items|length > 1 %}<i class="circle grey white-text nbElements" title="Nombre de contexte dans le même document">{{ items|length }}</i>{% endif %}
       <span class="title sentence" data-basename="{{title}}" data-target="{{ items[0].target }}" data-wid="{{ items[0].nb }}" data-docwid="{{items[0].widdoc}}" data-nb="{{items[0].nid}}">{{ items[0].sentence }} <br/></span>
+      <i class="material-icons copyInfo" title="Cliquez sur l'étoile pour copier les informations de ce contexte">star_rate</i>
     </li>
     {% if items|length > 1 %}
       {% for i in range(1,(items|length)) %}
-        <li class="collection-item subitems"><div class="sentence" data-target="{{ items[i].target }}" data-wid="{{ items[i].nb }}" data-nb="{{items[i].nid}}">{{items[i].sentence}}</div></li>
+        <li class="collection-item subitems"><div class="sentence" data-target="{{ items[i].target }}" data-wid="{{ items[i].nb }}" data-nb="{{items[i].nid}}" data-docwid="{{items[0].widdoc}}" data-basename="{{title}}">{{items[i].sentence}}</div>
+        <i class="material-icons copyInfo sub" title="Cliquez sur l'étoile pour copier les informations de ce contexte">star_rate</i>
+        </li>
       {% endfor %}
     {% endif %}
   </ul>
@@ -56,5 +59,6 @@
 
 {% block scripts %}
 <script src="/assets/vendor/js/jquery.jscroll.min.js"></script>
+<script src="/assets/vendor/js/clipboard.min.js"></script>
 <script src="/assets/created/js/search.js"></script>
 {% endblock %}

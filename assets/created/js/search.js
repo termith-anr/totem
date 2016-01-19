@@ -77,21 +77,69 @@ $(document).ready(function() {
       }
     }
 
-
     // Ajax Load paragraph
     var target,
         wid,
         parent,
         html;
+
+    // var getInfos = function(trigger){
+    //   var element = $(trigger);
+    //   var el, doc , bro , target , content = "";
+    //   if(element.hasClass("sub")){
+    //     bro = "div";
+    //   }
+    //   else{
+    //     bro = "li";
+    //   }
+    //   el = element.siblings("div").first();
+    //   doc = el.attr("data-basename");
+    //   target = el.attr("data-target");
+    //   w = $("w" , el);
+    //   w.each(function(){
+    //     content = content + $(this).text();
+    //     if(element.attr("wsafter") === "true"){
+    //       content += " ";
+    //     }
+    //   });
+    //   toCopy = content + "\\" + "[" + doc + "/" + target +"]";
+    //   console.log(toCopy);
+    //   return toCopy.toString();
+    // };
+
+    new Clipboard('.copyInfo', {
+      text: function(trigger){
+        var element = $(trigger);
+        var el, doc , bro , target , content = "";
+        if(element.hasClass("sub")){
+          bro = "div";
+        }
+        else{
+          bro = "span";
+        }
+        el = element.siblings(bro).first();
+        doc = el.attr("data-basename");
+        target = el.attr("data-target");
+        words = el.children("span").children();
+        console.log("w : " ,words);
+        words.each(function(){
+          content = content + $(this).text();
+          if($(this).attr("wsafter") == "true"){
+            content += " ";
+          }
+        });
+        toCopy = content + "\\" + "[" + doc + "/" + target +"]";
+        console.log(toCopy);
+        return toCopy.toString();
+      }
+    });
+
+
     $(document).on("click" , ".sentence" , function(){
-      console.log("clickkk");
       parent = $(this).parents(".collection-item").first();
-
       target = $(this).attr("data-target").replace(/,/g , "").toString();
-
-      console.log("target : " , target);
-
       wid = $(this).attr("data-wid").toString();
+
       // Si le p est deja present
       if($("#" + wid + "-" + target).length > 0){
         $("#" + wid + "-" + target).openModal();

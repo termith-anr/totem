@@ -113,8 +113,8 @@ w, pc{
   color: #607D8B;
 }
 
-[wsAfter="true"]{
-  margin-right: 4px;
+[wsAfter="true"]::after{
+  content: "\00a0";
 }
 
 [nb]{
@@ -156,6 +156,10 @@ w, pc{
   padding: 0;
 }
 
+.subitems{
+  position: relative;
+}
+
 .subitems .sentence{
     padding-left: 72px;
 }
@@ -194,6 +198,14 @@ w, pc{
 .sentence:hover{
   cursor: pointer;
   text-decoration: underline;
+}
+
+.copyInfo{
+  position: absolute;
+  right: -47px;
+  top: 4px;
+  opacity: 0.4;
+  cursor: pointer;
 }
 
 
