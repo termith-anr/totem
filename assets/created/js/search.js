@@ -17,8 +17,6 @@ $(document).ready(function() {
       collection,
       idToSearch;
 
-    console.log("pageID : " , pageID , " pageNB : " , pageNB , " nextPage : " , nextPage);
-
     // $("#containerUL").append('<a href="'+ nextPage +'" class="nextPage">next page</a>')
 
     $('.containerUL').jscroll({
@@ -55,7 +53,6 @@ $(document).ready(function() {
     $(".previousPage").after("<li class='waves-effect active'><a href='#'>" + pageNB + "</a></li>");
 
     if(previousPage){
-      console.log(" preivous possible ");
       $(".previousPage a").attr("href" , previousPage);
       $(".previousPage").after("<li class='waves-effect'><a href=' " + previousPage + " '>" + previousNB + "</a></li>");
       // $(".previousPage").on("click" , function(){
@@ -67,7 +64,6 @@ $(document).ready(function() {
     }
 
     if(nextPage){
-      console.log(" next possible ");
       if(liResults.length < 10){
         $(".nextPage").addClass("disabled");
       }
@@ -97,7 +93,6 @@ $(document).ready(function() {
         doc = el.attr("data-basename");
         target = el.attr("data-target");
         words = el.children("span").children();
-        console.log("w : " ,words);
         words.each(function(){
           content = content + $(this).text();
           if($(this).attr("wsafter") == "true"){
@@ -105,7 +100,6 @@ $(document).ready(function() {
           }
         });
         toCopy = content + "\\" + "[" + doc + "/" + target +"]";
-        console.log(toCopy);
         return toCopy.toString();
       }
     });
@@ -136,7 +130,6 @@ $(document).ready(function() {
           alert("La paragraphe parent semble introuvable");
           return;
         }
-        console.log("Il y a un P a ajouter");
         html = '<div id="' + wid + "-" + target + '" class="modal bottom-sheet">\
           <div class="modal-content">\
             <h4>Paragraphe</h4>\

@@ -9,7 +9,6 @@ module.exports = function(config) {
             return;
         }
         if(!req.params.page || (req.params.page === undefined)){
-            console.info("redirection ...");
             res.redirect("/search/" + req.params.xmlid + "/1");
             return;
         }
@@ -18,8 +17,6 @@ module.exports = function(config) {
             xmlid = (req.params.xmlid).split("&")[0],
             termPilot = ((req.params.xmlid).split("&").length === 2) ? decodeURIComponent((req.params.xmlid).split("&")[1]) : null,
             skip = (Number.isInteger(page) && page > 1) ? (page - 1)*50 +1 : 0 ;
-
-        console.info("termpilot : " , termPilot);
 
         var obj = {}, // Contian all items
             title,
