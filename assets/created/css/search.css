@@ -1,7 +1,46 @@
+/* BONUS Animation */
+
+@keyframes totem {
+  from{
+    transform : rotateY(0deg);
+  }
+  to{
+    transform : rotateY(360deg);
+  }
+}
+
 /*GENERAL*/
 
 body{
   min-height: 100vh;
+}
+
+nav{
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  width: 75px;
+  left: 0px;
+  top: 0px;
+  height: 100% !important;
+}
+
+nav > div{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+nav img{
+  width : 85%;
+  transition : transform 1s;
+}
+
+nav div:hover img{
+  cursor: pointer;
+  animation: totem 2s linear infinite;
+/*  transform : rotateY(180deg);
+*/  width : 85%;
 }
 
 #containerUL{
@@ -198,6 +237,11 @@ p .wordToSearch{
 
 
 /* FOOTER */
+
+footer{
+  position: relative;
+  z-index: 4;
+}
 
 .linkLogosPatner{
   filter : grayscale(100%);
