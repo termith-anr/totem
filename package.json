@@ -28,6 +28,7 @@
     "kuler": "0.0.0",
     "mongodb": "^2.0.42",
     "promised-mongo": "^0.11.1",
+    "underscore": "^1.8.3",
     "xmldom": "^0.1.19"
   },
   "repository": {

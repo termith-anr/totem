@@ -11,7 +11,6 @@ $(document).ready(function() {
       pageNB = parseInt(pageUrl.split("/")[3]),
       previousNB = (pageNB > 1) ? pageNB - 1 : 1,
       nextNB = (pageNB)  ? pageNB + 1 : 1,
-      previousPage = (pageNB > 1) ? "/search/" + pageID + "/" + previousNB : null, 
       nextPage = (pageNB) ? "/search/" + pageID + "/" + nextNB : null,
       liResults = $(".liResults"),
       collection,
@@ -20,7 +19,7 @@ $(document).ready(function() {
     // $("#containerUL").append('<a href="'+ nextPage +'" class="nextPage">next page</a>')
 
     $('.containerUL').jscroll({
-      debug : true,
+      debug : false,
       loadingHtml: '<div class="preloader-wrapper small active"><div class="spinner-layer spinner-red-only"><div class="circle-clipper left"><div class="circle"></div></div><div class="gap-patch"><div class="circle"></div></div><div class="circle-clipper right"><div class="circle"></div></div></div></div>',
       padding: 250,
       contentSelector : ".containerUL .toGet",
@@ -39,38 +38,11 @@ $(document).ready(function() {
         collection.children(".subitems").hide();
         collection.siblings().css({ opacity : 1 });
       }
-
     });
-    
-    $(".openCard , .activator").on("click"  , function(){
-      $(this).parents(".divResults").css("display" , "block");
-    });
-
-    $(".closeCard , .desactivator").on("click"  , function(){
-      $(this).parents(".divResults").css("display" , "");
-    });
-
-    $(".previousPage").after("<li class='waves-effect active'><a href='#'>" + pageNB + "</a></li>");
-
-    if(previousPage){
-      $(".previousPage a").attr("href" , previousPage);
-      $(".previousPage").after("<li class='waves-effect'><a href=' " + previousPage + " '>" + previousNB + "</a></li>");
-      // $(".previousPage").on("click" , function(){
-      //   window.location.href = previousPage;
-      // });
-    }
-    else{
-      $(".previousPage").addClass("disabled");
-    }
 
     if(nextPage){
-      if(liResults.length < 10){
-        $(".nextPage").addClass("disabled");
-      }
-      else{
-        $(".nextPage a").attr("href" , nextPage);
-        $(".nextPage").before("<li class='waves-effect'><a href=' " + nextPage + " '>" + nextNB + "</a></li>");
-      }
+      $(".nextPage a").attr("href" , nextPage);
+      $(".nextPage").before("<li class='waves-effect'><a href=' " + nextPage + " '>" + nextNB + "</a></li>");
     }
 
     // Ajax Load paragraph
