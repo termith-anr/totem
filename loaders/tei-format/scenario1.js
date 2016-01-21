@@ -26,15 +26,15 @@ module.exports = function (options, config) {
       xmlMode: true
     });
 
-    var wordsObj = xml('spanGrp[type="candidatsTermes"] span').filter('[target],[corresp],[ana~="#DM4"],[ana~="#DAOn"]'),
+    var wordsObj = xml('spanGrp[type="candidatsTermes"] span').filter('[ana~="#DM4"],[ana~="#DAOn"]'),
         words = [];
 
-    for (var i = 0; i < wordsObj.length ; i++) {
-      words[i] = wordsObj[i];
-    }
+    // for (var i = 0; i < wordsObj.length ; i++) {
+    //   words[i] = wordsObj[i];
+    // }
 
     //For each span in file ~ Seems does not work
-    async.eachSeries(words, function (word, next) {
+    async.forEachOfSeries(wordsObj, function (word, key, next) {
 
       // Build clone of input file
       var obj = clone(input,false);
