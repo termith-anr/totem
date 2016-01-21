@@ -1,5 +1,5 @@
 /*
- * Created by matthias on 26/02/15.
+ * Created by matthias on 26/10/15.
  * VERSION: Scenario 1
  */
  'use strict';
@@ -15,10 +15,8 @@ module.exports = function (options, config) {
   options = options || {};
   config = config.get() || {};
 
-
-
   var maxProcess = config.concurrency || 1,
-      delay =  200;
+      delay =  config.delay || 200;
 
   return function (input, submit) {
 
@@ -59,7 +57,7 @@ module.exports = function (options, config) {
           nextW,
           wBefore = "",
           wAfter = "",
-          askedWord = "<span class='candidatsTermes'>";
+          askedWord = "";
 
       target = ($(word).attr("target") || '').replace(/#/g , "").split(" ");
       firstWord = $('w[xml\\:id="' + target[0] + '"]');
@@ -111,55 +109,37 @@ module.exports = function (options, config) {
       para = para.replace(/<note/g, "<div");
       para = para.replace(/<\/note>/g, "</div>");
 
-      wBefore = '</span>';
-
-      var i , j = 0;
-      while (i < 6) {
-        // Si element exist
-        if (!prevAllW[j]) { break; }
-
-        prevW = $(prevAllW[j]);
-        //If its a word
-
-        if (prevW.is('w')) {
-          prevW = prevW.attr("nb", j + 1);
-          wBefore = prevW + wBefore;
-          i++;
+      for (var nbWBefore = 0, nbWAfter = 0, index = 0; (nbWBefore < 5 || nbWAfter < 5) ; index++) {
+        prevW = $(prevAllW[index]);
+        nextW = $(nextAllW[index]);
+        if(prevW.length){
+          if(prevW.is('w')){
+            prevW = prevW.attr("nb", ++nbWBefore);
+          }
+          if (!(prevW.is('note'))) {
+            wBefore = prevW + wBefore ;
+          }
         }
-        else if (!(prevW.is('note'))) {
-          wBefore = prevW + wBefore ;
+        else{
+          nbWBefore = 5;
         }
-        j++;
-      }
 
-      sentence = '<span class="wBefore">' + wBefore + sentence ;
-
-      wAfter = '<span class="wAfter">'
-      i = 0;
-      j = 0;
-      while (i < 6) {
-        // Si element exist
-        if(!nextAllW[j]) { break; }
-
-        nextW = $(nextAllW[j]);
-        //If its a word
-        if (nextW.is('w')) {
-          nextW = nextW.attr("nb", j + 1);
-          wAfter = wAfter + nextW;
-          i++;
+        if(nextW.length){
+          if(nextW.is('w')){
+            nextW = nextW.attr("nb", ++nbWAfter);
+          }
+          if (!(nextW.is('note'))) {
+            wAfter = wAfter + nextW ;
+          }
         }
-        else if (!(nextW.is('note'))) {
-          wAfter = wAfter + nextW;
+        else{
+          nbWAfter = 5;
         }
-        j++;
-      }
+      };
 
-      sentence =  sentence + wAfter + '</span>';
-
+      sentence = '<span class="wBefore">' + wBefore + '</span>' + '<span class="candidatsTermes">' + askedWord + '</span>' +  '<span class="wAfter">' + wAfter + '</span>' ;
       sentence = cheerio.load(sentence);
-
       sentence('note').remove();
-
       sentence = sentence.xml().toString();
 
       // Add elements to OBJ
