@@ -26,8 +26,9 @@ module.exports = function (options, config) {
       xmlMode: true
     });
 
-    var wordsObj = xml('spanGrp[type="candidatsTermes"] span').filter('[ana~="#DM4"],[ana~="#DAOn"]'),
-        words = [];
+    var wordsObj = xml('spanGrp[type="candidatsTermes"] span').filter('[ana~="#DM4"],[ana~="#DAOn"]');
+
+    delete input.content.xml;
 
     // for (var i = 0; i < wordsObj.length ; i++) {
     //   words[i] = wordsObj[i];
@@ -39,10 +40,7 @@ module.exports = function (options, config) {
       // Build clone of input file
       var obj = clone(input,false);
 
-      var $ = cheerio.load(obj.content.xml.toString(), {
-        normalizeWhitespace: true,
-        xmlMode: true
-      });
+      var $ = clone(xml, false);
 
       var firstWord,
           endWord,
@@ -149,10 +147,10 @@ module.exports = function (options, config) {
       obj.content.para = para;
       obj.content.lemma = lemma;
       obj.content.words = askedWord.toString();
-      obj.content.nb = obj.fid + "" + words.indexOf(word) ;
+      // obj.content.nb = obj.fid + "" + wordsObj.indexOf(word) ;
 
       // Remove BIG & USELESS XML content
-      delete obj.content.xml;
+      // delete obj.content.xml;
 
       var qe, timeoutID;
 

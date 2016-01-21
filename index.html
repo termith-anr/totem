@@ -44,7 +44,7 @@
     </li>
     {% if items|length > 1 %}
       {% for i in range(1,(items|length)) %}
-        <li class="collection-item subitems"><div class="sentence" data-target="{{ items[i].target }}" data-wid="{{ items[i].nb }}" data-nb="{{items[i].nid}}" data-docwid="{{items[0].widdoc}}" data-basename="{{title}}">{{items[i].sentence}}</div>
+        <li class="collection-item subitems"><div class="sentence" data-target="{{ items[i].target }}" data-wid="{{ items[i].nb }}" data-nb="{{items[i].nid}}" data-docwid="{{items[i].widdoc}}" data-basename="{{title}}">{{items[i].sentence}}</div>
         <i class="material-icons copyInfo sub" title="Cliquez sur l'étoile pour copier les informations de ce contexte">star_rate</i>
         </li>
       {% endfor %}

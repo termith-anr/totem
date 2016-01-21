@@ -6,7 +6,7 @@ module.exports = {
             "method" : "get"
         },
         {
-            "path" : "/getpar/:wid/:target",
+            "path" : "/getpar/:wid",
             "value" : "getpar.js",
             "method" : "get"
         }

@@ -114,23 +114,22 @@ $(document).ready(function() {
 
     $(document).on("click" , ".sentence" , function(){
       parent = $(this).parents(".collection-item").first();
-      target = $(this).attr("data-target").replace(/,/g , "").toString();
-      wid = $(this).attr("data-wid").toString();
+      wid = $(this).attr("data-docwid").toString();
 
       // Si le p est deja present
-      if($("#" + wid + "-" + target).length > 0){
-        $("#" + wid + "-" + target).openModal();
+      if($("#" + wid).length > 0){
+        $("#" + wid).openModal();
         return;
       }
       $.ajax({
-        url: "/getpar/" +  wid + "/" + target
+        url: "/getpar/" +  wid
       })
       .done(function(data){
         if(!data.p){
           alert("La paragraphe parent semble introuvable");
           return;
         }
-        html = '<div id="' + wid + "-" + target + '" class="modal bottom-sheet">\
+        html = '<div id="' + wid + '" class="modal bottom-sheet">\
           <div class="modal-content">\
             <h4>Paragraphe</h4>\
             <p>' + data.p + '</p>\
@@ -140,7 +139,7 @@ $(document).ready(function() {
           </div>\
         </div>';
         $(parent).append(html);
-        $("#" + wid + "-" + target).openModal();
+        $("#" + wid).openModal();
       });
     });
   }
