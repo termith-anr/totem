@@ -14,7 +14,7 @@
   "homepage": "http://github.com/termith-anr/totem",
   "main": "index.js",
   "bin": {
-    "idefix": "./idefix"
+    "totem": "./totem"
   },
   "scripts": {
     "start": "node ./server.js"
@@ -33,7 +33,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/touv/termith-anr/idefix.git"
+    "url": "https://github.com/touv/termith-anr/totem.git"
   },
   "license": "MIT",
   "bugs": {
