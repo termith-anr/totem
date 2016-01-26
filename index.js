@@ -17,7 +17,7 @@ module.exports = {
             "pattern" : "**/*.xml"
         },
         {
-            "script" : "tei-format/scenario1.js",
+            "script" : "speedUnsecured.js",
             "pattern" : "**/*.xml"
         }
     ]
