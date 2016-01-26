@@ -16,7 +16,7 @@ module.exports = function (options, config) {
   config = config.get() || {};
 
   var maxProcess = config.concurrency || 1,
-      delay =  config.delay || 200;
+      delay = 200;
 
   return function (input, submit) {
 
@@ -30,7 +30,11 @@ module.exports = function (options, config) {
     // Remove big & useless XML in input
     delete input.content.xml;
 
-    //For each span in file ~ Seems does not work
+    if(wordsObj.length <= 0){
+      return;
+    }
+
+    //For each span in file ~
     async.forEachOfSeries(wordsObj, function (word, key, next) {
 
       // Build clone of input file
@@ -52,18 +56,19 @@ module.exports = function (options, config) {
           askedWord = "";
 
       target = ($(word).attr("target") || '').replace(/#/g , "").split(" ");
-      firstWord = $('w[xml\\:id="' + target[0] + '"]');
-
       var filtr = $("body div ,text front div[lang='fr'], text front div:not([lang]),  teiHeader fileDesc titleStmt title[lang='fr'], teiHeader fileDesc titleStmt title:not([lang])");
-      var isInFiltr = filtr.find(firstWord).length
+      firstWord = filtr.find('w[xml\\:id="' + target[0] + '"]');
+
+      var isInFiltr = firstWord.length
 
       // If word not in body balise continue with other span
       if (isInFiltr < 1) {
-        return next();
+        next();
+        return;
       }
       // filtr.find('[nb]').removeAttr('nb');
 
-      endWord = (target.length > 1) ? $('w[xml\\:id="' + target[target.length - 1] + '"]') : firstWord;
+      endWord = (target.length > 1) ? filtr.find('w[xml\\:id="' + target[target.length - 1] + '"]') : firstWord;
       corresp = ($(word).attr("corresp") || '').replace(/#entry-/g, "").toString();
       lemma   = ($(word).attr("lemma") || '').toString();
 
@@ -90,7 +95,7 @@ module.exports = function (options, config) {
 
       //Create asked words and add attribut nb
       for (var i = 0 ; i < target.length ; i++) {
-        askedWord = askedWord + para.find('w[xml\\:id="' + target[i] + '"]').attr("nb" , "0");
+        askedWord = askedWord + para.find('[xml\\:id="' + target[i] + '"]').attr("nb" , "0");
       }
 
 
