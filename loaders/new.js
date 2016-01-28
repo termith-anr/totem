@@ -15,8 +15,8 @@ module.exports = function (options, config) {
   options = options || {};
   config = config.get() || {};
 
-  var maxProcess = config.concurrency || 1,
-      delay =  config.delay || 200;
+  var maxProcess =  1,
+      delay =  200;
 
   return function (input, submit) {
 
@@ -122,7 +122,6 @@ module.exports = function (options, config) {
         }
       };
 
-
       /* Create sentence */
       sentence = '<span class="wBefore">' + wBefore + '</span>' + '<span class="candidatsTermes">' + askedWord + '</span>' +  '<span class="wAfter">' + wAfter + '</span>' ;
       sentence = cheerio.load(sentence);
@@ -154,6 +153,7 @@ module.exports = function (options, config) {
         timeoutID = setTimeout(function() {
           if (qe.length() < maxProcess) {
             resume();
+            return;
           } else {
             pause(resume);
           }
@@ -166,11 +166,14 @@ module.exports = function (options, config) {
         pause(next);
       } else {
         next();
+        return;
       }
     },
     function (err) {
-      if (err) { console.info(kuler(err , "red")); }
-
+      if (err) { 
+        console.info(kuler("\n " + err + " \n" , "red")); 
+        return
+      }
       // the last callback means that all documents have been submitted
       submit();
     });

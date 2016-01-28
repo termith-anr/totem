@@ -17,7 +17,7 @@ module.exports = {
             "pattern" : "**/*.xml"
         },
         {
-            "script" : "speedUnsecured.js",
+            "script" : "new.js",
             "pattern" : "**/*.xml"
         }
     ]
