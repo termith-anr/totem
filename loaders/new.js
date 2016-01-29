@@ -15,8 +15,8 @@ module.exports = function (options, config) {
   options = options || {};
   config = config.get() || {};
 
-  var maxProcess =  1,
-      delay =  200;
+  var maxProcess =  4,
+      delay =  50;
 
   return function (input, submit) {
 
@@ -26,12 +26,26 @@ module.exports = function (options, config) {
       xmlMode: true
     });
     // Get only span in right spanGrp that have righ attrbs (OBJ)
-    var wordsObj = $('spanGrp[type="candidatsTermes"] span').filter('[ana~="#DM4"],[ana~="#DAOn"]');
+    var wordsObj = $('spanGrp[type="candidatsTermes"] span').filter('[ana~="#DM4"],[ana~="#DAOn"]').toArray();
+
     // Remove big & useless XML in input
     delete input.content.xml;
+    var qe, timeoutID;
 
+    var pause = function (resume) {
+      clearTimeout(timeoutID);
+      timeoutID = setTimeout(function() {
+        if (qe.length() < maxProcess) {
+          resume();
+          return;
+        } else {
+          pause(resume);
+        }
+      }, delay);
+    };
+    
     //For each span in file ~ Seems does not work
-    async.forEachOfSeries(wordsObj, function (word, key, next) {
+    async.eachSeries(wordsObj, function (word, next) {
 
       // Build clone of input file
       var obj = clone(input,false);
@@ -67,10 +81,10 @@ module.exports = function (options, config) {
       corresp = ($(word).attr("corresp") || '').replace(/#entry-/g, "").toString();
       lemma   = ($(word).attr("lemma") || '').toString();
 
-      var nbSiblings = firstWord.siblings().length;
-      var nbParaChildren = firstWord.closest("p").children().length;
+      var nbSiblings = firstWord.siblings();
+      var nbParaChildren = firstWord.closest("p").children();
 
-      para = (nbSiblings < 11 && nbParaChildren > 12) ? firstWord.closest("p").clone() : firstWord.parent().clone();
+      para = (nbSiblings.length < 11 && nbParaChildren.length > 12) ? nbParaChildren.clone() : firstWord.parent().clone();
 
       var attribut;
       para.find('hi').each(function (i,el) {
@@ -83,6 +97,7 @@ module.exports = function (options, config) {
         para.find(this).replaceWith(para.find(this).children());
       });
       sentence = para.clone();
+      sentence.find('note').remove();
 
       prevAllW = sentence.find('w[xml\\:id="' + target[0] + '"]').prevAll();
       nextAllW = sentence.find('w[xml\\:id="' + target[target.length - 1] + '"]').nextAll();
@@ -124,9 +139,6 @@ module.exports = function (options, config) {
 
       /* Create sentence */
       sentence = '<span class="wBefore">' + wBefore + '</span>' + '<span class="candidatsTermes">' + askedWord + '</span>' +  '<span class="wAfter">' + wAfter + '</span>' ;
-      sentence = cheerio.load(sentence);
-      sentence('note').remove();
-      sentence = sentence.xml().toString();
 
       para = para.toString();
       para = para.replace(/<head/g, "<div");
@@ -146,20 +158,6 @@ module.exports = function (options, config) {
       obj.content.lemma = lemma;
       obj.content.words = askedWord.toString();
 
-      var qe, timeoutID;
-
-      var pause = function (resume) {
-        clearTimeout(timeoutID);
-        timeoutID = setTimeout(function() {
-          if (qe.length() < maxProcess) {
-            resume();
-            return;
-          } else {
-            pause(resume);
-          }
-        }, delay);
-      };
-
       qe = submit(obj);
 
       if (qe.length() >= maxProcess) {
@@ -172,7 +170,7 @@ module.exports = function (options, config) {
     function (err) {
       if (err) { 
         console.info(kuler("\n " + err + " \n" , "red")); 
-        return
+        process.exit(1);
       }
       // the last callback means that all documents have been submitted
       submit();

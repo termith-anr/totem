@@ -1,4 +1,7 @@
 module.exports = {
+    "turnoffWebdav": true,
+    "debug": true,
+    "logFormat": "dev",
     "routes": [
         {
             "path" : "/search/:xmlid?/:page?",
