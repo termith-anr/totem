@@ -15,8 +15,8 @@ module.exports = function (options, config) {
   options = options || {};
   config = config.get() || {};
 
-  var maxProcess =  4,
-      delay =  50;
+  var maxProcess =  conf.concurrency || 1,
+      delay =  conf.delay || 100;
 
   return function (input, submit) {
 
@@ -170,7 +170,6 @@ module.exports = function (options, config) {
     function (err) {
       if (err) { 
         console.info(kuler("\n " + err + " \n" , "red")); 
-        process.exit(1);
       }
       // the last callback means that all documents have been submitted
       submit();
