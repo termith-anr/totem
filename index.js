@@ -20,7 +20,7 @@ module.exports = {
             "pattern" : "**/*.xml"
         },
         {
-            "script" : "new.js",
+            "script" : "sentenceAndPara.js",
             "pattern" : "**/*.xml"
         }
     ]

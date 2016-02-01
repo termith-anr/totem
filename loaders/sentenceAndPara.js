@@ -15,8 +15,8 @@ module.exports = function (options, config) {
   options = options || {};
   config = config.get() || {};
 
-  var maxProcess =  conf.concurrency || 1,
-      delay =  conf.delay || 100;
+  var maxProcess =  config.concurrency || 1,
+      delay =  config.delay || 100;
 
   return function (input, submit) {
 
@@ -26,26 +26,42 @@ module.exports = function (options, config) {
       xmlMode: true
     });
     // Get only span in right spanGrp that have righ attrbs (OBJ)
-    var wordsObj = $('spanGrp[type="candidatsTermes"] span').filter('[ana~="#DM4"],[ana~="#DAOn"]').toArray();
+    var words = $('spanGrp[type="candidatsTermes"] span').filter('[ana~="#DM4"],[ana~="#DAOn"]').toArray();
 
+    if(words.length == "0"){
+      return submit(null , input);
+    }
+
+    var filtr = $("body div ,text front div[lang='fr'], text front div:not([lang]),  teiHeader fileDesc titleStmt title[lang='fr'], teiHeader fileDesc titleStmt title:not([lang])");
+
+    var attribut;
+    $('hi').each(function (i,el) {
+      if ($(this).attr('rend')) {
+        attribut = $(this).attr('rend');
+        $(this).children().each(function () {
+          $(this).attr('rend' , attribut);
+        });
+      }
+      $(this).replaceWith($(this).children());
+    });
     // Remove big & useless XML in input
     delete input.content.xml;
-    var qe, timeoutID;
+    var qe;
 
-    var pause = function (resume) {
-      clearTimeout(timeoutID);
-      timeoutID = setTimeout(function() {
-        if (qe.length() < maxProcess) {
-          resume();
-          return;
-        } else {
-          pause(resume);
-        }
-      }, delay);
-    };
+    // var pause = function (resume) {
+    //   clearTimeout(timeoutID);
+    //   timeoutID = setTimeout(function() {
+    //     if (qe.length() < maxProcess) {
+    //       resume();
+    //       return;
+    //     } else {
+    //       pause(resume);
+    //     }
+    //   }, delay);
+    // };
     
     //For each span in file ~ Seems does not work
-    async.eachSeries(wordsObj, function (word, next) {
+    async.eachSeries(words, function (word, next) {
 
       // Build clone of input file
       var obj = clone(input,false);
@@ -68,7 +84,6 @@ module.exports = function (options, config) {
       target = ($(word).attr("target") || '').replace(/#/g , "").split(" ");
       firstWord = $('w[xml\\:id="' + target[0] + '"]');
 
-      var filtr = $("body div ,text front div[lang='fr'], text front div:not([lang]),  teiHeader fileDesc titleStmt title[lang='fr'], teiHeader fileDesc titleStmt title:not([lang])");
       var isInFiltr = filtr.find(firstWord).length
 
       // If word not in body balise continue with other span
@@ -86,16 +101,6 @@ module.exports = function (options, config) {
 
       para = (nbSiblings.length < 11 && nbParaChildren.length > 12) ? nbParaChildren.clone() : firstWord.parent().clone();
 
-      var attribut;
-      para.find('hi').each(function (i,el) {
-        if (para.find(this).attr('rend')) {
-          attribut = para.find(this).attr('rend');
-          para.find(this).children().each(function () {
-            para.find(this).attr('rend' , attribut);
-          });
-        }
-        para.find(this).replaceWith(para.find(this).children());
-      });
       sentence = para.clone();
       sentence.find('note').remove();
 
@@ -107,7 +112,6 @@ module.exports = function (options, config) {
       for (var i = 0 ; i < target.length ; i++) {
         askedWord = askedWord + para.find('w[xml\\:id="' + target[i] + '"]').attr("nb" , "0");
       }
-
 
       for (var nbWBefore = 0, nbWAfter = 0, index = 0; (nbWBefore < 5 || nbWAfter < 5) ; index++) {
         prevW = (prevAllW[index]) ? prevAllW.filter(prevAllW[index]) : null;
@@ -123,7 +127,6 @@ module.exports = function (options, config) {
         else{
           nbWBefore = 5;
         }
-
         if(nextW){
           if(nextW.is('w')){
             nextW = nextW.attr("nb", ++nbWAfter);
@@ -135,7 +138,7 @@ module.exports = function (options, config) {
         else{
           nbWAfter = 5;
         }
-      };
+      }
 
       /* Create sentence */
       sentence = '<span class="wBefore">' + wBefore + '</span>' + '<span class="candidatsTermes">' + askedWord + '</span>' +  '<span class="wAfter">' + wAfter + '</span>' ;
@@ -161,10 +164,11 @@ module.exports = function (options, config) {
       qe = submit(obj);
 
       if (qe.length() >= maxProcess) {
-        pause(next);
+        setTimeout(function () {
+          return next();
+        }, delay * qe.length());
       } else {
-        next();
-        return;
+        return next();
       }
     },
     function (err) {
@@ -173,6 +177,6 @@ module.exports = function (options, config) {
       }
       // the last callback means that all documents have been submitted
       submit();
-    });
+    })
   }
 };
