@@ -107,41 +107,63 @@ module.exports = function (options, config) {
       prevAllW = sentence.find('w[xml\\:id="' + target[0] + '"]').prevAll();
       nextAllW = sentence.find('w[xml\\:id="' + target[target.length - 1] + '"]').nextAll();
 
-
       //Create asked words and add attribut nb
       for (var i = 0 ; i < target.length ; i++) {
         askedWord = askedWord + para.find('w[xml\\:id="' + target[i] + '"]').attr("nb" , "0");
       }
 
-      for (var nbWBefore = 0, nbWAfter = 0, index = 0; (nbWBefore < 5 || nbWAfter < 5) ; index++) {
-        prevW = (prevAllW[index]) ? prevAllW.filter(prevAllW[index]) : null;
-        nextW = (nextAllW[index]) ? nextAllW.filter(nextAllW[index]) : null;
-        if(prevW){
-          if(prevW.is('w')){
-            prevW = prevW.attr("nb", ++nbWBefore);
-          }
-          if (!(prevW.is('note'))) {
-            wBefore = prevW + wBefore ;
-          }
+      var wordInSentenceBegin = sentence.find('w[xml\\:id="' + target[0] + '"]'),
+          wordInSentenceEnd   = sentence.find('w[xml\\:id="' + target[target.length - 1] + '"]'),
+          wordInSentenceBeginID = wordInSentenceBegin.index(),
+          wordInSentenceEndID = wordInSentenceEnd.index();
+
+      sentence.children().each(function(index, element){
+        element = sentence.find(element);
+        if((index < (wordInSentenceBeginID - 5))||(index > (wordInSentenceEndID + 5))){
+          element.remove();
         }
         else{
-          nbWBefore = 5;
+          element.attr("nb" , (wordInSentenceBeginID - index  - (target.length - 1))*(-1));
         }
-        if(nextW){
-          if(nextW.is('w')){
-            nextW = nextW.attr("nb", ++nbWAfter);
-          }
-          if (!(nextW.is('note'))) {
-            wAfter = wAfter + nextW ;
-          }
-        }
-        else{
-          nbWAfter = 5;
-        }
-      }
+      });
+
+      var before = sentence.find("[nb]='-5',[nb]='-4',[nb]='-3',[nb]='-2',[nb]='-1'");
+      before.first()
+
+      sentence = sentence.contents().toString();
+      sentence = sentence.replace(/\s\s+/g, ' ');
+
+      console.info("sentence ", sentence);
+
+      // for (var nbWBefore = 0, nbWAfter = 0, index = 0; (nbWBefore < 5 || nbWAfter < 5) ; index++) {
+      //   prevW = (prevAllW[index]) ? prevAllW.filter(prevAllW[index]) : null;
+      //   nextW = (nextAllW[index]) ? nextAllW.filter(nextAllW[index]) : null;
+      //   if(prevW){
+      //     if(prevW.is('w')){
+      //       prevW = prevW.attr("nb", ++nbWBefore);
+      //     }
+      //     if (!(prevW.is('note'))) {
+      //       wBefore = prevW + wBefore ;
+      //     }
+      //   }
+      //   else{
+      //     nbWBefore = 5;
+      //   }
+      //   if(nextW){
+      //     if(nextW.is('w')){
+      //       nextW = nextW.attr("nb", ++nbWAfter);
+      //     }
+      //     if (!(nextW.is('note'))) {
+      //       wAfter = wAfter + nextW ;
+      //     }
+      //   }
+      //   else{
+      //     nbWAfter = 5;
+      //   }
+      // }
 
       /* Create sentence */
-      sentence = '<span class="wBefore">' + wBefore + '</span>' + '<span class="candidatsTermes">' + askedWord + '</span>' +  '<span class="wAfter">' + wAfter + '</span>' ;
+      // sentence = '<span class="wBefore">' + wBefore + '</span>' + '<span class="candidatsTermes">' + askedWord + '</span>' +  '<span class="wAfter">' + wAfter + '</span>' ;
 
       para = para.toString();
       para = para.replace(/<head/g, "<div");
