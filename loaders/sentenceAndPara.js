@@ -82,7 +82,7 @@ module.exports = function (options, config) {
           askedWord = "";
 
       target = ($(word).attr("target") || '').replace(/#/g , "").split(" ");
-      firstWord = $('w[xml\\:id="' + target[0] + '"]');
+      firstWord = $('[xml\\:id="' + target[0] + '"]');
 
       var isInFiltr = filtr.find(firstWord).length
 
@@ -92,33 +92,51 @@ module.exports = function (options, config) {
       }
       // filtr.find('[nb]').removeAttr('nb');
 
-      endWord = (target.length > 1) ? $('w[xml\\:id="' + target[target.length - 1] + '"]') : firstWord;
+      endWord = (target.length > 1) ? $('[xml\\:id="' + target[target.length - 1] + '"]') : firstWord;
       corresp = ($(word).attr("corresp") || '').replace(/#entry-/g, "").toString();
       lemma   = ($(word).attr("lemma") || '').toString();
 
       var nbSiblings = firstWord.siblings();
-      var nbParaChildren = firstWord.closest("p").children();
+      var nbParaChildren = firstWord.closest("p").children(),
+          content,
+          reg = /\B[^\w\s\n\t]\B/,
+          pc = $('<pc>ex</pc>'),
+          element;
 
       para = (nbSiblings.length < 11 && nbParaChildren.length > 12) ? nbParaChildren.clone() : firstWord.parent().clone();
-
-      sentence = para.clone();
-      sentence.find('note').remove();
-
-      prevAllW = sentence.find('w[xml\\:id="' + target[0] + '"]').prevAll();
-      nextAllW = sentence.find('w[xml\\:id="' + target[target.length - 1] + '"]').nextAll();
+      para.find("w").each(function(index, el){
+        element = para.find(el);
+        console.info("elmeent: " , element.attr("xml:id"));
+        if(element.contents()[0].type == "text"){
+          content = element.contents().text();
+          if (reg.test(content)) {
+            pc.attr("xml:id" , element.attr("xml:id"));
+            pc.text(content);
+            // console.info("pc : " , pc.toString());
+            element.replaceWith(pc.toString());
+            console.info(element);
+          } 
+        }
+      });
 
       var word2Add;
       //Create asked words and add attribut nb
       for (var i = 0 ; i < target.length ; i++) {
-        word2Add = para.find('w[xml\\:id="' + target[i] + '"]');
+        word2Add = para.find('[xml\\:id="' + target[i] + '"]');
         if(word2Add[0] && word2Add[0].next){
-          if(word2Add[0].next.type == "text" && word2Add[0].next.data == " "){
+          if(word2Add[0].next.type == "text"){
            word2Add.attr("wsAfter", "true");
           }
         }
         askedWord = askedWord + word2Add.attr("nb" , "0");
-
       }
+
+      sentence = para.clone();
+      sentence.find('note').remove();
+
+      prevAllW = sentence.find('[xml\\:id="' + target[0] + '"]').prevAll();
+      nextAllW = sentence.find('[xml\\:id="' + target[target.length - 1] + '"]').nextAll();
+
 
       for (var nbWBefore = 0, nbWAfter = 0, index = 0; (nbWBefore < 5 || nbWAfter < 5) ; index++) {
         prevW = (prevAllW[index]) ? prevAllW.filter(prevAllW[index]) : null;
@@ -127,11 +145,10 @@ module.exports = function (options, config) {
           if(prevW.is('w')){
             prevW = prevW.attr("nb", ++nbWBefore);
             if(prevW[0] && prevW[0].next){
-              if(prevW[0].next.type == "text" && prevW[0].next.data == " "){
+              if(prevW[0].next.type == "text"){
                prevW.attr("wsAfter", "true");
               }
             }
-            
           }
           if (!(prevW.is('note'))) {
             wBefore = prevW + wBefore ;
@@ -144,14 +161,14 @@ module.exports = function (options, config) {
           if(nextW.is('w')){
             nextW = nextW.attr("nb", ++nbWAfter);
             if(nextW[0] && nextW[0].next){
-              if(nextW[0].next.type == "text" && nextW[0].next.data == " "){
+              if(nextW[0].next.type == "text"){
                 nextW.attr("wsAfter", "true");
               }
             }
           }
           if (!(nextW.is('note'))) {
             wAfter = wAfter + nextW ;
-          }
+          }      
         }
         else{
           nbWAfter = 5;
