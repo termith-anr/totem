@@ -47,18 +47,6 @@ module.exports = function (options, config) {
     // Remove big & useless XML in input
     delete input.content.xml;
     var qe;
-
-    // var pause = function (resume) {
-    //   clearTimeout(timeoutID);
-    //   timeoutID = setTimeout(function() {
-    //     if (qe.length() < maxProcess) {
-    //       resume();
-    //       return;
-    //     } else {
-    //       pause(resume);
-    //     }
-    //   }, delay);
-    // };
     
     //For each span in file ~ Seems does not work
     async.eachSeries(words, function (word, next) {
@@ -93,8 +81,18 @@ module.exports = function (options, config) {
       // filtr.find('[nb]').removeAttr('nb');
 
       endWord = (target.length > 1) ? $('[xml\\:id="' + target[target.length - 1] + '"]') : firstWord;
-      corresp = ($(word).attr("corresp") || '').replace(/#entry-/g, "").toString();
+      corresp = $(word).attr("corresp");
       lemma   = ($(word).attr("lemma") || '').toString();
+
+      if(corresp.indexOf("#TS2.0") && corresp.indexOf("#TS1.4")){
+        corresp = corresp.replace(/#TS1.4-entry-.*$|#TS2.0-entry-/g, "").toString();
+      }
+      else if(corresp.indexOf("#TS2.0")){
+        corresp = corresp.replace(/#TS2.0-entry-/g, "").toString();
+      }
+      else if(corresp.indexOf("#TS1.4")){
+        corresp = corresp.replace(/#TS1.4-entry-/g, "").toString();
+      }
 
       var nbSiblings = firstWord.siblings();
       var nbParaChildren = firstWord.closest("p").children(),
@@ -106,7 +104,6 @@ module.exports = function (options, config) {
       para = (nbSiblings.length < 11 && nbParaChildren.length > 12) ? nbParaChildren.clone() : firstWord.parent().clone();
       para.find("w").each(function(index, el){
         element = para.find(el);
-        console.info("elmeent: " , element.attr("xml:id"));
         if(element.contents()[0].type == "text"){
           content = element.contents().text();
           if (reg.test(content)) {
@@ -114,7 +111,7 @@ module.exports = function (options, config) {
             pc.text(content);
             // console.info("pc : " , pc.toString());
             element.replaceWith(pc.toString());
-            console.info(element);
+            // console.info(element);
           } 
         }
       });
