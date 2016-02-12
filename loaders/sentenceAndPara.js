@@ -84,13 +84,13 @@ module.exports = function (options, config) {
       corresp = $(word).attr("corresp");
       lemma   = ($(word).attr("lemma") || '').toString();
 
-      if(corresp.indexOf("#TS2.0") && corresp.indexOf("#TS1.4")){
-        corresp = corresp.replace(/#TS1.4-entry-.*$|#TS2.0-entry-/g, "").toString();
+      if((corresp.indexOf("#TS2.0") > (-1)) && (corresp.indexOf("#TS1.4") > (-1))){
+         corresp = corresp.replace(/-#TS1.4-entry-.*$|#TS2.0-entry-/g, "").toString();
       }
-      else if(corresp.indexOf("#TS2.0")){
+      else if(corresp.indexOf("#TS2.0") > (-1)){
         corresp = corresp.replace(/#TS2.0-entry-/g, "").toString();
       }
-      else if(corresp.indexOf("#TS1.4")){
+      else if(corresp.indexOf("#TS1.4") > (-1)){
         corresp = corresp.replace(/#TS1.4-entry-/g, "").toString();
       }
 
@@ -141,14 +141,14 @@ module.exports = function (options, config) {
         if(prevW){
           if(prevW.is('w')){
             prevW = prevW.attr("nb", ++nbWBefore);
+          }
+          if (!(prevW.is('note'))) {
             if(prevW[0] && prevW[0].next){
               if(prevW[0].next.type == "text"){
                prevW.attr("wsAfter", "true");
               }
             }
-          }
-          if (!(prevW.is('note'))) {
-            wBefore = prevW + wBefore ;
+            wBefore = prevW + wBefore;
           }
         }
         else{
@@ -157,13 +157,13 @@ module.exports = function (options, config) {
         if(nextW){
           if(nextW.is('w')){
             nextW = nextW.attr("nb", ++nbWAfter);
+          }
+          if (!(nextW.is('note'))) {
             if(nextW[0] && nextW[0].next){
               if(nextW[0].next.type == "text"){
                 nextW.attr("wsAfter", "true");
               }
             }
-          }
-          if (!(nextW.is('note'))) {
             wAfter = wAfter + nextW ;
           }      
         }
