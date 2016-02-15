@@ -85,13 +85,13 @@ module.exports = function (options, config) {
       lemma   = ($(word).attr("lemma") || '').toString();
 
       if((corresp.indexOf("#TS2.0") > (-1)) && (corresp.indexOf("#TS1.4") > (-1))){
-         corresp = corresp.replace(/-#TS1.4-entry-.*$|#TS2.0-entry-/g, "").toString();
+         corresp = "2.0-" + corresp.replace(/-#TS1.4-entry-.*$|#TS2.0-entry-/g, "").toString();
       }
       else if(corresp.indexOf("#TS2.0") > (-1)){
-        corresp = corresp.replace(/#TS2.0-entry-/g, "").toString();
+        corresp = "2.0-" + corresp.replace(/#TS2.0-entry-/g, "").toString();
       }
       else if(corresp.indexOf("#TS1.4") > (-1)){
-        corresp = corresp.replace(/#TS1.4-entry-/g, "").toString();
+        corresp = "1.4-" + corresp.replace(/#TS1.4-entry-/g, "").toString();
       }
 
       var nbSiblings = firstWord.siblings();
