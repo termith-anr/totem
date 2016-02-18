@@ -26,7 +26,7 @@ module.exports = function (options, config) {
       xmlMode: true
     });
     // Get only span in right spanGrp that have righ attrbs (OBJ)
-    var words = $('spanGrp[type="candidatsTermes"] span').filter('[ana~="#DM4"],[ana~="#DAOn"]').toArray();
+    var words = $('spanGrp[type="candidatsTermes"] span[ana~="#DM4"],spanGrp[type="candidatsTermes"] span[ana~="#DAOn"]').toArray();
 
     if(words.length == "0"){
       return submit(null , input);
@@ -46,7 +46,18 @@ module.exports = function (options, config) {
     });
     // Remove big & useless XML in input
     delete input.content.xml;
-    var qe;
+    var qe , timeoutID;
+
+    var pause = function (resume) {
+     clearTimeout(timeoutID);
+     timeoutID = setTimeout(function() {
+       if (qe.length() < maxProcess) {
+         return resume();
+       } else {
+         return pause(resume);
+       }
+     }, delay * qe.length());
+   };
     
     //For each span in file ~ Seems does not work
     async.eachSeries(words, function (word, next) {
@@ -196,9 +207,7 @@ module.exports = function (options, config) {
       qe = submit(obj);
 
       if (qe.length() >= maxProcess) {
-        setTimeout(function () {
-          return next();
-        }, delay * qe.length());
+        pause(next);
       } else {
         return next();
       }
