@@ -2,18 +2,17 @@ FROM node:argon
 
 EXPOSE 3000
 
-# Create app directory
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
+COPY . /app/
 
 RUN echo '{ \
   "httpPort": 3000, \
-  "configPath": "/usr/src/app/config.json", \
-  "dataPath": "/usr/src/app/exemple" \
+  "configPath": "/app/config.json", \
+  "dataPath": "/app/exemple" \
 }' > /etc/ezmaster.json
 
-# Install app dependencies
-COPY . /usr/src/app/
+
+WORKDIR /app
+
 
 RUN npm install .
 
